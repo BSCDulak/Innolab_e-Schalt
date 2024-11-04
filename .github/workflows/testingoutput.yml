@@ -28,7 +28,7 @@ jobs:
 
       # Step 3: Compile the program
       - name: Compile hello.cpp
-        run: g++ -o hello hello.cpp
+        run: g++ -o hello hellworld\main.cpp
 
       # Step 4: Run the program and save output to file
       - name: Run the Hello World program and capture output
