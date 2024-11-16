@@ -1,0 +1,4 @@
+services:
+  eschalt:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
