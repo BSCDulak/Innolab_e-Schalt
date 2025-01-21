@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using eSchalt.Backend;
+using eSchalt.Backend.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
