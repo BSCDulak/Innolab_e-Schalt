@@ -1,8 +1,4 @@
-//@import "~bootstrap/scss/bootstrap"; // Importiert die Bootstrap SCSS-Quellen
-
-// Deine eigenen Anpassungen und Variablen hier
-//$primary-color: #ff6347; // Beispiel: Primärfarbe auf Tomate ändern
-
-//body {
-//  background-color: black;
-//}
+@use "../../node_modules/bootstrap/scss/bootstrap" with (
+  $primary: #001b75,
+  $secondary: #ffc70d,
+);

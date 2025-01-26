@@ -5,13 +5,16 @@ WORKDIR /src
 RUN apt-get update && apt-get install -y curl gnupg && \
     curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs
-RUN npm install -g sass
+COPY eSchalt/package.json eSchalt/package-lock.json* ./eSchalt/
+WORKDIR /src/eSchalt
+RUN npm install
+WORKDIR /src
 COPY eSchalt/eSchalt.csproj eSchalt/
 RUN dotnet restore eSchalt/eSchalt.csproj
 COPY . .
 
 WORKDIR /src/eSchalt
-RUN sass ./Frontend/Scss:./wwwroot/css
+RUN npm run sass
 RUN dotnet build "eSchalt.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
@@ -25,8 +28,7 @@ COPY --from=publish /app/publish .
 RUN apt-get update && apt-get install -y curl gnupg && \
     curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs
-RUN npm install -g sass
-RUN node -v && npm -v
+RUN npm install
 
 ENV ASPNETCORE_URLS=http://*:5000
 ENTRYPOINT ["dotnet", "eSchalt.dll"]
