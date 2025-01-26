@@ -6,10 +6,10 @@ namespace eSchalt.Backend.Models
     {
 
         [Column("componentid")]
-        public string ComponentId { get; set; }
+        public string? ComponentId { get; set; }
 
         [Column("stockwerk")]
-        public string Stockwerk { get; set; }
+        public string? Stockwerk { get; set; }
         [Column("raum")]
         public string? Raum { get; set; }
         [Column("bemerkung")]
