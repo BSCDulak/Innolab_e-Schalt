@@ -3,7 +3,11 @@ using Microsoft.AspNetCore.HttpOverrides;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+#if DEBUG
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+#else
 builder.Services.AddRazorPages();
+#endif
 
 var app = builder.Build();
 

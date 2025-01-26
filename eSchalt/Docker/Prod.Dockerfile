@@ -6,6 +6,13 @@ ENV DOTNET_GENERATE_ASPNET_CERTIFICATE=false
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
+WORKDIR /app
+COPY eSchalt/package.json ./
+RUN apt-get update && apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y nodejs
+RUN npm install
+
 WORKDIR /src
 COPY ["eSchalt/eSchalt.csproj", "eSchalt/"]
 RUN dotnet restore "./eSchalt/./eSchalt.csproj"

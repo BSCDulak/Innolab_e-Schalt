@@ -1,5 +1,18 @@
 # Innolab_e-Schalt
 
+## Command Shortlist
+### Docker
+```shell
+docker-compose up -d
+docker-compose up --build -d
+docker exec -it eschalt bash
+```
+
+### Frontend
+```shell
+docker exec -it eschalt bash -c "npm run sass:watch"
+```
+
 ## Setup
 ### Zertifikat
 
@@ -18,7 +31,7 @@ Es braucht die Dateien `localhost.cer.pem` (Zertifikat) und `localhost.key.pem` 
 (beim Key Umwandeln stattdessen folgenden Command: `openssl pkcs12 -in localhost.key.p12 -nocerts -nodes -out localhost.key.pem -legacy`)
 
 ### Docker
-Docker images builden: `docker-compose build`
+Docker container starten + images builden: `docker-compose up --build -d`
 
 ## ASP.NET Applikation
 ### Starten
@@ -27,3 +40,22 @@ Docker images builden: `docker-compose build`
 *-d lässt die container im Hintergrund laufen*
 
 Website ist lokal unter `localhost` bzw. `https://localhost/` aufrufbar
+
+## Frontend
+### SCSS / CSS
+In `Frontend/Scss` kommen alle .scss Files hinein.
+Diese werden bei einem image build compiled.
+Sie können auch mit dem Command 
+```shell
+docker exec -it eschalt bash -c "npm run sass:watch"
+```
+gewatched werden (= es hört auf Änderungen und compiled automatisch)
+oder die Files können einmalig compiled werden:
+```shell
+docker exec -it eschalt bash -c "npm run sass"
+```
+
+Die Files zu den Razor Pages (also Files im Ordner /Pages/...)
+können nur CSS-Files sein, keine SASS-Files.
+
+Das Compilen funktioniert nur in der Dev-Umgebung, in der Prod-Umgebung nicht.
