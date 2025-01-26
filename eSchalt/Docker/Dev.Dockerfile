@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
+ARG BUILD_CONFIGURATION=Debug
 
 WORKDIR /src
 RUN apt-get update && apt-get install -y curl gnupg && \
@@ -31,4 +31,8 @@ RUN apt-get update && apt-get install -y curl gnupg && \
 RUN npm install
 
 ENV ASPNETCORE_URLS=http://*:5000
+ENV DOTNET_USE_POLLING_FILE_WATCHER=1
+ENV DOTNET_WATCH_RESTART_ON_RUDE_EDIT=1
+ENV DOTNET_WATCH_SUPPRESS_MSBUILD_INCREMENTALISM=1
+ENV DOTNET_ENVIRONMENT=Development
 ENTRYPOINT ["dotnet", "eSchalt.dll"]
