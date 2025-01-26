@@ -12,6 +12,8 @@
     <form method="post">
         <button type="submit" asp-page-handler="GetAusgang" class="btn btn-primary">Get Ausgang</button>
     </form>
+    
+    <a asp-page="/Demopage" class="btn btn-primary">Go to Demo Page</a>
 
     <!-- Display the result of the query -->
     @if (!string.IsNullOrEmpty(Model.AusgangResult))

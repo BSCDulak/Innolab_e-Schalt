@@ -4,6 +4,10 @@ namespace eSchalt.Backend.Models
 {
     public class Eschalttabledemo
     {
+
+        [Column("componentid")]
+        public string ComponentId { get; set; }
+
         [Column("stockwerk")]
         public string Stockwerk { get; set; }
         [Column("raum")]
