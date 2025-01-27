@@ -10,6 +10,7 @@ public class DemopageModel : PageModel
 {
     private readonly ApplicationDbContext _context;
 
+    // Property to hold the result
     public string ComponentInfo { get; set; }
 
     public DemopageModel(ApplicationDbContext context)
@@ -19,34 +20,43 @@ public class DemopageModel : PageModel
 
     public void OnGet()
     {
-        // Initial page load (no component clicked)
+        // Initial page load, no component selected
         ComponentInfo = string.Empty;
     }
 
-    public async Task<IActionResult> OnPostAsync(string componentId)
+    public async Task<IActionResult> OnPostAsync(int componentId)
     {
-        if (string.IsNullOrEmpty(componentId))
+        if (componentId <= 0)
         {
-            ComponentInfo = "No component selected.";
+            ComponentInfo = "No valid component selected.";
             return Page();
         }
 
-        // Query the database for the component based on its ID (example logic)
-        var result = await _context.Eschalttabledemo
-            .Where(e => e.ComponentId == componentId) // Assuming "ComponentId" exists in your table
-            .FirstOrDefaultAsync();
+        try
+        {
+            // Query the database to find the component
+            var result = await _context.Eschalttabledemo
+                .Where(e => e.ComponentId == componentId) // Assuming "ComponentId" exists in your table
+                .FirstOrDefaultAsync();
 
-        if (result != null)
-        {
-            // Display relevant info about the component
-            ComponentInfo = $"Component ID: {result.ComponentId}\n" +
-                            $"Stockwerk: {result.StockwerkKurz}\n" +
-                            $"SPS Position: {result.SpsPositionImArray}\n" +
-                            $"Ausgang: {result.Ausgang}";
+            if (result != null)
+            {
+                // Format the component info for display
+                ComponentInfo = $"Component ID: {result.ComponentId}<br/>" +
+                                $"Stockwerk: {result.StockwerkKurz}<br/>" +
+                                $"SPS Position: {result.SpsPositionImArray}<br/>" +
+                                $"Ausgang: {result.Ausgang}";
+            }
+            else
+            {
+                ComponentInfo = $"No matching component found for componentId {componentId}.";
+            }
         }
-        else
+        catch (Exception ex)
         {
-            ComponentInfo = "No matching component found.";
+            // Log the exception and display an error
+            Console.WriteLine($"Error: {ex.Message}");
+            ComponentInfo = $"An error occurred while processing the request:{ex.Message}";
         }
 
         return Page();

@@ -6,7 +6,7 @@ namespace eSchalt.Backend.Models
     {
 
         [Column("componentid")]
-        public string? ComponentId { get; set; }
+        public int? ComponentId { get; set; }
 
         [Column("stockwerk")]
         public string? Stockwerk { get; set; }

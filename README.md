@@ -30,6 +30,7 @@ und diese beiden Dateien dann in `/nginx` innerhalb des Projektes reinkopieren.
 ### Docker
 Docker images builden: `docker-compose build`
 
+
 ## ASP.NET Applikation
 ### Starten
 `docker-compose up -d`
@@ -37,3 +38,5 @@ Docker images builden: `docker-compose build`
 *-d lässt die container im Hintergrund laufen*
 
 Website ist lokal unter `localhost` bzw. `https://localhost/` aufrufbar
+
+bei Änderungen schneller neubuilden und neustarten `docker-compose up -d --build`
