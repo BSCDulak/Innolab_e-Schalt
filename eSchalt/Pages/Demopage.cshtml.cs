@@ -36,7 +36,7 @@ public class DemopageModel : PageModel
         {
             // Query the database to find the component
             var result = await _context.Eschalttabledemo
-                .Where(e => e.ComponentId == componentId) // Assuming "ComponentId" exists in your table
+                .Where(e => e.ComponentId == componentId) 
                 .FirstOrDefaultAsync();
 
             if (result != null)
@@ -45,7 +45,11 @@ public class DemopageModel : PageModel
                 ComponentInfo = $"Component ID: {result.ComponentId}<br/>" +
                                 $"Stockwerk: {result.StockwerkKurz}<br/>" +
                                 $"SPS Position: {result.SpsPositionImArray}<br/>" +
-                                $"Ausgang: {result.Ausgang}";
+                                $"Ausgang: {result.Ausgang}<br/>" +
+                                $"Gruppe: {result.Gruppe}<br/>" +
+                                $"Leiter: {result.Leiter} <br/>" +
+                                $"Sicherung: {result.Sicherung} <br/>" +
+                                $"Relais: {result.Relais} <br/>";
             }
             else
             {
