@@ -1,3 +1,4 @@
+# todo umstellen, damit es von package.json installiert
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
