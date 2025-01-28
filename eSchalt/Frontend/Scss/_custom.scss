@@ -1,0 +1,21 @@
+@use "../../node_modules/bootstrap/scss/bootstrap" as bootstrap;
+
+h1.border-bottom {
+  border-bottom: bootstrap.$primary solid 5px !important;
+}
+
+.mt-gd, .my-gd {
+  margin-top: 60px !important;
+}
+
+.mt-g, .my-g {
+  margin-top: 30px !important;
+}
+
+.mb-gd, .my-gd {
+  margin-bottom: 60px !important;
+}
+
+.mb-g, .my-g {
+  margin-bottom: 30px !important;
+}
