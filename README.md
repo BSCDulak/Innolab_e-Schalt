@@ -40,3 +40,13 @@ Docker images builden: `docker-compose build`
 Website ist lokal unter `localhost` bzw. `https://localhost/` aufrufbar
 
 bei Änderungen schneller neubuilden und neustarten `docker-compose up -d --build`
+
+##Backend:
+
+Die Struktur der tables ist in Backend/Models zu erkennen, der gemappte Name der table in Backend/DBContext.cs 
+Die Datenbank hat standardmäßig keine tables, man kann sie z.B. über pg admin 4 in docker (username und password der db in appsettings.json zu finden) erstellen und mit einer csv Datei befüllen. (csv Datei gibt es im Backend folder) 
+Verbindung mit pg admin 4 docker: 
+
+Server registrieren:	 
+Connection: "Host name/address" host.docker.internal, "Port" 5432, "Username" siehe appsettings.json 
+Rest bleibt Standard. 

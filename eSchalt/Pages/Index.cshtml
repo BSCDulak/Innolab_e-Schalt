@@ -6,14 +6,14 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome, hit that button!</h1>
-    <p> The button will prolly not work unless the db is setup via pgadmin to output an "ausgang" where "stockwerk" = "OG" and "Sps Position im array" = "155". <br/>I yet have to setup something so that the db is just created on build if it doesn't exist already'</p>
+    <p> The demopage will not work unless there is a local table with appropriate collums and data <br/>I yet have to setup something so that the db is just created on build if it doesn't exist already'</p>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     
     <form method="post">
-        <button type="submit" asp-page-handler="GetAusgang" class="btn btn-primary">Get Ausgang</button>
+        <button type="submit" asp-page-handler="GetAusgang" class="btn btn-primary">Get Ausgang hardcodingDB test</button>
     </form>
-    
-    <a asp-page="/Demopage" class="btn btn-primary">Go to Demo Page</a>
+    <br />
+    <a asp-page="/Demopage" class="btn btn-primary">Demo Page localDB test</a>
 
     <!-- Display the result of the query -->
     @if (!string.IsNullOrEmpty(Model.AusgangResult))
