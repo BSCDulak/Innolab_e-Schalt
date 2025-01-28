@@ -7,7 +7,7 @@ services:
       - eschalt_db
     build:
       context: .
-      dockerfile: eSchalt/Dockerfile
+      dockerfile: eSchalt/Docker/Prod.Dockerfile
     ports:
       - "5000:5000"
       - "5001:5001"

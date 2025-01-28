@@ -1,0 +1,7 @@
+@use "../../node_modules/bootstrap/scss/bootstrap" with (
+  $primary: #001b75,
+  $secondary: #ffc70d,
+  $font-family-base: unquote("Gantari, sans-serif"),
+);
+
+@use 'fonts' as fonts;

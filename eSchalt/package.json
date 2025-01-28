@@ -1,0 +1,15 @@
+{
+  "name": "frontend",
+  "version": "1.0.0",
+  "scripts": {
+    "sass": "sass ./Frontend/Scss:./wwwroot/css --no-source-map",
+    "sass:watch": "sass ./Frontend/Scss:./wwwroot/css --no-source-map --watch"
+  },
+  "dependencies": {
+    "sass": "^1.83.4",
+    "bootstrap": "^5.3.*"
+  },
+  "devDependencies": {
+    "sass": "^1.70.0"
+  }
+}

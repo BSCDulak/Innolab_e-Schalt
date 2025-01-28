@@ -6,7 +6,11 @@ using eSchalt.Backend.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+#if DEBUG
+builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+#else
 builder.Services.AddRazorPages();
+#endif
 
 // Register DbContext with PostgreSQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
