@@ -5,6 +5,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
     build:
       dockerfile: eSchalt/Docker/Dev.Dockerfile
+      args:
+        BUILD_CONFIGURATION: "Debug"
     volumes:
       - ./eSchalt/Frontend/Scss:/app/Frontend/Scss
       - ./eSchalt/Pages:/app/Pages
