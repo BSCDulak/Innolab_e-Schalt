@@ -68,3 +68,6 @@ Die Files zu den Razor Pages (also Files im Ordner /Pages/...)
 können nur CSS-Files sein, keine SASS-Files.
 
 Das Compilen funktioniert nur in der Dev-Umgebung, in der Prod-Umgebung nicht.
+
+## Dev
+Bilder Koordinaten: https://www.image-map.net/

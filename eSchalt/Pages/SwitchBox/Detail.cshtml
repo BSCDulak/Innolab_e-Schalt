@@ -1,4 +1,5 @@
 @page "/detail"
+@using eSchalt.Frontend.Classes.Models
 @model eSchalt.Pages.SwitchBox.DetailpageModel
 @{
     ViewData["Title"] = "Schaltkasten Informationen";
@@ -6,43 +7,65 @@
 <div class="container">
     <h1 class="border-bottom mb-g mt-gd pb-3">@ViewData["Title"]</h1>
 
+    @* Image with clickable componentes *@
     <div class="row g-3 g-lg-5">
         <div class="col-lg-6">
-            <img class="w-100 rounded-5 shadow" src="/images/electrical_cabinets/demopage.jpg" alt="Electrical Cabinet" usemap="#cabinet-map">
+            <div class="position-relative">
+                <img class="w-100 rounded-5 shadow" src="/images/electrical_cabinets/demopage.jpg" alt="Electrical Cabinet">
+
+                @* Clickable components *@
+                <form method="post">
+                    @foreach (Component component in Model.SwitchBox?.Components ?? Enumerable.Empty<Component>())
+                    {
+                        <button
+                            type="submit"
+                            name="selectedComponent"
+                            value="@component.Id"
+                            title="@component.Name"
+                            class="component component-onclick @(Model.SelectedComponent?.Id == component.Id ? "selected" : "")"
+                            style="top: @component.ButtonTop%; left: @component.ButtonLeft%; width: @component.ButtonWidth%; height: @component.ButtonHeight%;"
+                            disabled="@(Model.SelectedComponent?.Id == component.Id)"
+                        ></button>
+                    }
+                </form>
+            </div>
         </div>
 
+        @* Selected Component Info *@
         <div class="col-lg-6">
-            @if (Model.Component != null)
-            {
-                <div class="bg-primary text-white rounded-5 p-4">
-                    <h2 class="text-xl font-bold">Allgemeine Informationen</h2>
-                    <div class="d-flex">
+            <div class="bg-primary text-white rounded-5 p-4">
+                <h2 class="text-xl font-bold">Allgemeine Informationen</h2>
+                <div class="d-flex">
+                    @if (Model.SwitchBox != null)
+                    {
                         <div>
-                            <span class="fw-bold">Raum:</span> @Model.Component.Raum<br/>
-                            <span class="fw-bold">Stockwerk:</span> @Model.Component.Stockwerk<br/>
+                            <span class="fw-bold">Raum:</span> @Model.SwitchBox.Room<br/>
+                            <span class="fw-bold">Stockwerk:</span> @Model.SwitchBox.Floor<br/>
                         </div>
                         <div class="ms-5">
-                            <span class="fw-bold">Typ PD:</span> @Model.Component.Typ<br/>
-                            <span class="fw-bold">Gruppe:</span> @Model.Component.Gruppe<br/>
+                            <span class="fw-bold">Typ PD:</span> @Model.SwitchBox.Type<br/>
+                            <span class="fw-bold">Gruppe:</span> @Model.SwitchBox.Group<br/>
                         </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <div>Es konnten leider keine Informationen gefunden werden.</div>
+                    }
                 </div>
-                <div class="p-4">
+            </div>
+            <div class="p-4">
+                @if (Model.SelectedComponent != null)
+                {
                     <h2 class="text-xl font-bold">Ausgewählte Komponente:</h2>
-                    <div class="fw-bold">Name: S1</div>
+                    <div class="fw-bold">Name: @Model.SelectedComponent.Name</div>
                     <div class="fw-bold">Verbunden mit:</div>
                     <div>...</div>
-                </div>
-            }
-            else
-            {
-            <div id="component-info" class="fst-italic">Es konnten leider keine Informationen gefunden werden.</div>
-            }
+                }
+                else
+                {
+                    <div id="component-info" class="fst-italic">Es wurde noch keine Komponente ausgewählt.</div>
+                }
+            </div>
         </div>
     </div>
 </div>
-
-
-<form id="form" method="get">
-    <input type="hidden" id="componentId" name="componentId" />
-</form>
