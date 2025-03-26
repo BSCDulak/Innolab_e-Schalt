@@ -9,6 +9,11 @@ docker exec -it eschalt bash
 ```
 
 ### Frontend
+Ohne docker:
+```shell
+npm run sass:watch
+```
+Im container:
 ```shell
 docker exec -it eschalt bash -c "npm run sass:watch"
 ```

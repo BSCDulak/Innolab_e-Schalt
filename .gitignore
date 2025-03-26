@@ -748,3 +748,6 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,rider,jetbrains,visualstudio,visualstudiocode,aspnetcore,dotnetcore
+
+./eSchalt/package-lock.json
+package-lock.json

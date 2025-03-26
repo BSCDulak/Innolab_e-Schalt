@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using eSchalt.Backend;
@@ -11,6 +12,11 @@ builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 #else
 builder.Services.AddRazorPages();
 #endif
+
+// Set culture
+var cultureInfo = new CultureInfo("en-US");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 // Register DbContext with PostgreSQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
