@@ -20,6 +20,10 @@
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.12" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="wwwroot\css\" />
+    </ItemGroup>
+
     <Target Name="PreBuild" BeforeTargets="Build">
         <Exec Command="npm install" />
         <Exec Command="npm run sass" />

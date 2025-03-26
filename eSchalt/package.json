@@ -2,8 +2,8 @@
   "name": "frontend",
   "version": "1.0.0",
   "scripts": {
-    "sass": "sass ./Frontend/Scss:./wwwroot/css --no-source-map",
-    "sass:watch": "sass ./Frontend/Scss:./wwwroot/css --no-source-map --watch"
+    "sass": "sass ./Frontend/Scss:./wwwroot/css --style=compressed",
+    "sass:watch": "sass ./Frontend/Scss:./wwwroot/css --style=compressed --watch"
   },
   "dependencies": {
     "sass": "^1.83.4",
