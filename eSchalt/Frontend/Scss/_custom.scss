@@ -1,9 +1,8 @@
 @use "../../node_modules/bootstrap/scss/bootstrap" as bootstrap;
 
-h1.border-bottom {
-  border-bottom: bootstrap.$primary solid 5px !important;
-}
-
+/*
+ Similar classes to bootstrap
+ */
 .mt-gd, .my-gd {
   margin-top: 60px !important;
 }
@@ -18,6 +17,71 @@ h1.border-bottom {
 
 .mb-g, .my-g {
   margin-bottom: 30px !important;
+}
+
+/*
+ Text color match with background
+ */
+.bg-primary {
+  color: white;
+}
+.bg-primary a {
+  color: white;
+}
+
+/*
+ Links
+ */
+a {
+  &:focus {
+    outline: bootstrap.$primary solid 3px;
+    outline-offset: 0;
+    background-color: bootstrap.$primary;
+    color: white;
+  }
+}
+
+/*
+ Headlines
+ */
+h1 {
+  border-bottom: bootstrap.$primary solid 5px !important;
+  margin-bottom: 30px;
+  margin-top: 60px;
+  padding-bottom: 1rem;
+}
+
+/*
+ Navbar
+ */
+nav {
+  // Logo
+  .navbar-brand {
+    min-width: 60px;
+    @include bootstrap.media-breakpoint-up(md) {
+      min-width: 75px;
+    }
+    
+    &:focus {
+      background-color: transparent;
+    }
+  }
+}
+
+/*
+  Footer
+ */
+main {
+  min-height: 75.5vh; // so that the footer is always at the bottom of the screen or below
+}
+footer {
+  a {
+    text-decoration: none;
+    &:hover, &:focus {
+      text-decoration: underline;
+      outline-color: white;
+    }
+  }
 }
 
 /* Detail Page / Switch Box Components */

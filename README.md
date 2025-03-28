@@ -8,16 +8,6 @@ docker-compose up --build -d
 docker exec -it eschalt bash
 ```
 
-### Frontend
-Ohne docker:
-```shell
-npm run sass:watch
-```
-Im container:
-```shell
-docker exec -it eschalt bash -c "npm run sass:watch"
-```
-
 ## Setup
 ### Zertifikat
 
@@ -59,20 +49,12 @@ Website ist lokal unter `localhost` bzw. `https://localhost/` aufrufbar
 ### SCSS / CSS
 In `Frontend/Scss` kommen alle .scss Files hinein.
 Diese werden bei einem image build compiled.
-Sie können auch mit dem Command 
-```shell
-docker exec -it eschalt bash -c "npm run sass:watch"
-```
-gewatched werden (= es hört auf Änderungen und compiled automatisch)
-oder die Files können einmalig compiled werden:
-```shell
-docker exec -it eschalt bash -c "npm run sass"
-```
+
+Ein Sass watcher wird automatisch mit dem Sass container ausgeführt.
+Damit werden in der Dev Umgebung Änderungen in den scss Dateien sofort erkannt.
 
 Die Files zu den Razor Pages (also Files im Ordner /Pages/...)
 können nur CSS-Files sein, keine SASS-Files.
-
-Das Compilen funktioniert nur in der Dev-Umgebung, in der Prod-Umgebung nicht.
 
 ## Dev
 Bilder Koordinaten: https://www.image-map.net/
