@@ -2,14 +2,13 @@
   "name": "frontend",
   "version": "1.0.0",
   "scripts": {
-    "sass": "sass ./Frontend/Scss:./wwwroot/css --style=compressed",
-    "sass:watch": "sass ./Frontend/Scss:./wwwroot/css --style=compressed --watch"
-  },
-  "dependencies": {
-    "sass": "^1.83.4",
-    "bootstrap": "^5.3.*"
+    "sass": "sass ./Frontend/Scss:./wwwroot/css --style=compressed --load-path=node_modules",
+    "sass:watch": "sass Frontend/Scss/main.scss:wwwroot/css/main.css --style=compressed --watch --load-path=node_modules",
+    "copy:fa": "cp -aR node_modules/@fortawesome/fontawesome-free/webfonts/. wwwroot/webfonts/"
   },
   "devDependencies": {
-    "sass": "^1.70.0"
+    "sass": "^1.70.0",
+    "bootstrap": "^5.3.*",
+    "@fortawesome/fontawesome-free" : "^6.7"
   }
 }

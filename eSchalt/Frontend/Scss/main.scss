@@ -1,4 +1,4 @@
-@use "../../node_modules/bootstrap/scss/bootstrap" with (
+@use "bootstrap/scss/bootstrap.scss" with (
   $primary: #001b75,
   $secondary: #ffc70d,
   $font-family-base: unquote("Gantari, sans-serif"),
@@ -10,6 +10,9 @@
     xxl: 1140px
   )
 );
+
+@use "@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@use "@fortawesome/fontawesome-free/scss/solid.scss";
 
 @use 'fonts' as fonts;
 @use 'custom' as custom;

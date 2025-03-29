@@ -9,9 +9,10 @@ services:
     volumes:
       - ./eSchalt/Frontend/Scss:/app/Frontend/Scss
       - ./eSchalt/wwwroot/css:/app/wwwroot/css
+      - ./eSchalt/wwwroot/webfonts:/app/wwwroot/webfonts
       - ./eSchalt/package.json:/app/package.json
-      - ./eSchalt/node_modules:/app/node_modules
-    command: sh -c "npm install && npm run sass:watch"
+      - ./eSchalt/package-lock.json:/app/package-lock.json
+    command: sh -c "npm install && npm run copy:fa && npm run sass:watch"
 
 #  eschalt_cache:
 #    restart: no
