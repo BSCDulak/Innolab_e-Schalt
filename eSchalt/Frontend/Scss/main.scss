@@ -8,7 +8,8 @@
     lg: 960px,
     xl: 1140px,
     xxl: 1140px
-  )
+  ),
+  $info-bg-subtle: #e3faec,
 );
 
 @use "@fortawesome/fontawesome-free/scss/fontawesome.scss";
@@ -16,3 +17,6 @@
 
 @use 'fonts' as fonts;
 @use 'custom' as custom;
+@use 'page' as page;
+@use 'pages/detail' as detail;
+@use 'pages/upload' as upload;

@@ -7,6 +7,11 @@
 <div class="container">
     <h1>@ViewData["Title"]</h1>
 
+    @* Photo / Camera Links *@
+    <div class="pb-4">
+        @await Html.PartialAsync("_PhotoList")
+    </div>
+
     @* Image with clickable componentes *@
     <div class="row g-3 g-lg-5">
         <div class="col-lg-6">

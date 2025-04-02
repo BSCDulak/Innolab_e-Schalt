@@ -1,4 +1,4 @@
-@use "../../node_modules/bootstrap/scss/bootstrap" as bootstrap;
+@use "bootstrap/scss/bootstrap" as bootstrap;
 
 /*
  Similar classes to bootstrap
@@ -33,11 +33,40 @@
  Links
  */
 a {
-  &:focus {
+  &:not(.btn):focus {
     outline: bootstrap.$primary solid 3px;
     outline-offset: 0;
     background-color: bootstrap.$primary;
     color: white;
+  }
+}
+
+/*
+ Buttons
+ */
+.btn {
+  border-width: 3px;
+  
+  &.btn-primary {
+    &:hover, &:focus {
+      color: bootstrap.$primary;
+      background-color: white;
+      border-color: bootstrap.$primary;
+    }
+  }
+
+  &.btn-secondary {
+    &:hover, &:focus {
+      background-color: white;
+      border-color: bootstrap.$secondary;
+    }
+  }
+  
+  &.btn-secondary--inverted {
+    border-color: bootstrap.$secondary;
+    &:hover, &:focus {
+      background-color: bootstrap.$secondary;
+    }
   }
 }
 
@@ -49,68 +78,4 @@ h1 {
   margin-bottom: 30px;
   margin-top: 60px;
   padding-bottom: 1rem;
-}
-
-/*
- Navbar
- */
-nav {
-  // Logo
-  .navbar-brand {
-    min-width: 60px;
-    @include bootstrap.media-breakpoint-up(md) {
-      min-width: 75px;
-    }
-    
-    &:focus {
-      background-color: transparent;
-    }
-  }
-}
-
-/*
-  Footer
- */
-main {
-  min-height: 75.5vh; // so that the footer is always at the bottom of the screen or below
-}
-footer {
-  a {
-    text-decoration: none;
-    &:hover, &:focus {
-      text-decoration: underline;
-      outline-color: white;
-    }
-  }
-}
-
-/* Detail Page / Switch Box Components */
-$transparency: 0.1;
-.component {
-  position: absolute;
-  border: 2px solid bootstrap.$secondary;
-  border-radius: 6px;
-  background-color: rgba(bootstrap.$secondary, $transparency);
-  transition: background-color 0.2s ease;
-  box-shadow: 0 0 10px 4px rgba(255, 255, 255, 0.5);
-  
-  &:focus, &:hover {
-    &:not(.selected) {
-      z-index: 1;
-      background-color: rgba(white, $transparency);
-      border-width: 4px;
-      border-color: white;
-      outline-color: transparent;
-      box-shadow: 0 0 11px 5px rgba(255, 255, 255, 0.5);
-    }
-  }
-  
-  &.selected {
-    z-index: 1;
-    background-color: transparent;
-    border-color: white;
-    border-style: dashed;
-    border-width: 3px;
-    box-shadow: 0 0 9px 4px rgba(255, 255, 255, 0.6);
-  }
 }
