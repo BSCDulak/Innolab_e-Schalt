@@ -12,8 +12,12 @@ namespace eSchalt.Pages.SwitchBox;
 public class DetailpageModel : PageModel
 {
     private readonly ApplicationDbContext _context;
-    private const string ImagePath = "wwwroot/images/electrical_cabinets/demopage.jpg";
+    private const string ImageFolder = "images/uploads/temp/";
+    private const string DefaultImage = "images/electrical_cabinets/demopage.jpg";
     private readonly SwitchBoxRepository _repository = new();
+    
+    public string ImagePath { get; private set; }
+    public string? FileName { get; set; }
     public int ImageWidth { get; private set; }
     public int ImageHeight { get; private set; }
 
@@ -26,8 +30,9 @@ public class DetailpageModel : PageModel
         UpdateImage();
     }
 
-    public async Task<IActionResult> OnGetAsync()
+    public async Task<IActionResult> OnGetAsync(string? fileName)
     {
+        FileName = fileName;
         Initialize();
         
         // SessionUtility.SetObject(HttpContext.Session, "SwitchBox", SwitchBox);
@@ -37,7 +42,8 @@ public class DetailpageModel : PageModel
 
     private void UpdateImage()
     {
-        using (var image = Image.Load<Rgba32>(ImagePath))
+        ImagePath = FileName != null ? ImageFolder + FileName : DefaultImage;
+        using (var image = Image.Load<Rgba32>("wwwroot/" + ImagePath))
         {
             ImageWidth = image.Width;
             ImageHeight = image.Height;
@@ -56,8 +62,9 @@ public class DetailpageModel : PageModel
         // HttpContext.Session.SetInt32("ImageHeight", ImageHeight);
     }
     
-    public IActionResult OnPost()
+    public async Task<IActionResult> OnPostAsync(string? fileName)
     {
+        FileName = fileName;
         Initialize();
         // SwitchBox = SessionUtility.GetObject<Frontend.Classes.Models.SwitchBox>(HttpContext.Session, "SwitchBox");
         // ImageWidth = HttpContext.Session.GetInt32("ImageWidth") ?? 0;

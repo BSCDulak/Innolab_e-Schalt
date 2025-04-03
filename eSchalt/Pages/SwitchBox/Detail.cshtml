@@ -16,10 +16,11 @@
     <div class="row g-3 g-lg-5">
         <div class="col-lg-6">
             <div class="position-relative">
-                <img class="w-100 rounded-5 shadow" src="/images/electrical_cabinets/demopage.jpg" alt="Electrical Cabinet">
+                <img class="w-100 rounded-5 shadow" src="@Model.ImagePath" alt="Electrical Cabinet">
 
                 @* Clickable components *@
                 <form method="post">
+                    <input type="hidden" name="fileName" value="@Model.FileName" />
                     @foreach (Component component in Model.SwitchBox?.Components ?? Enumerable.Empty<Component>())
                     {
                         <button
@@ -29,8 +30,7 @@
                             title="@component.Name"
                             class="component component-onclick @(Model.SelectedComponent?.Id == component.Id ? "selected" : "")"
                             style="top: @component.ButtonTop%; left: @component.ButtonLeft%; width: @component.ButtonWidth%; height: @component.ButtonHeight%;"
-                            disabled="@(Model.SelectedComponent?.Id == component.Id)"
-                        ></button>
+                            disabled="@(Model.SelectedComponent?.Id == component.Id)"></button>
                     }
                 </form>
             </div>

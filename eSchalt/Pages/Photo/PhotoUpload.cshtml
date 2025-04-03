@@ -19,31 +19,32 @@
                     <p id="infoText" class="text-break">Ziehe Dateien hierher oder wähle sie von deinem Computer aus.</p>
                 </div>
             </div>
-            <button id="uploadButton" class="btn btn-primary mt-4 px-5 py-3" type="submit">Hochladen</button></div>
+            <button id="uploadButton" class="btn btn-primary mt-4 px-5 py-3" type="submit">Hochladen</button>
+        </div>
     </form>
 </div>
 
-@* <script> *@
-@*     // Disable / Enable Upload Button *@
-@*     const photoInput = document.getElementById('photoUpload') *@
-@*     const uploadButton = document.getElementById('uploadButton') *@
-@* *@
-@*     uploadButton.disabled = true; *@
-@*     photoInput.addEventListener('change', () => { *@
-@*         uploadButton.disabled = !photoInput.files.length *@
-@*     }); *@
-@*      *@
-@*     // Change info text to uploaded image *@
-@*     const infoText = document.getElementById('infoText') *@
-@*     const container = document.getElementsByClassName('border-container--file-upload')[0] *@
-@*     photoInput.addEventListener('change', () => { *@
-@*          *@
-@*         if (photoInput.files.length) { *@
-@*             infoText.innerHTML = `Bild ausgewählt: <span class="fw-bold">${photoInput.files[0].name}</span>` *@
-@*             container.classList.add('file-uploaded') *@
-@*         } else { *@
-@*             infoText.textContent = 'Ziehe Dateien hierher oder wähle sie von deinem Computer aus.' *@
-@*             container.classList.remove('file-uploaded') *@
-@*         } *@
-@*     }); *@
-@* </script> *@
+<script>
+    // Disable / Enable Upload Button
+    const photoInput = document.getElementById('photoUpload')
+    const uploadButton = document.getElementById('uploadButton')
+
+    uploadButton.disabled = true;
+    photoInput.addEventListener('change', () => {
+        uploadButton.disabled = !photoInput.files.length
+    });
+
+    // Change info text to uploaded image
+    const infoText = document.getElementById('infoText')
+    const container = document.getElementsByClassName('border-container--file-upload')[0]
+    photoInput.addEventListener('change', () => {
+
+        if (photoInput.files.length) {
+            infoText.innerHTML = `Bild ausgewählt: <span class="fw-bold">${photoInput.files[0].name}</span>`
+            container.classList.add('file-uploaded')
+        } else {
+            infoText.textContent = 'Ziehe Dateien hierher oder wähle sie von deinem Computer aus.'
+            container.classList.remove('file-uploaded')
+        }
+    });
+</script>

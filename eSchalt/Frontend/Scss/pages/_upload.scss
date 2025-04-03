@@ -30,16 +30,21 @@
   }
 
   /* When an image was uploaded */
-  //&.file-uploaded {
-  //  background-color: bootstrap.$info-bg-subtle;
-  //  border-color: darkgreen;
-  //  
-  //  i {
-  //    color: bootstrap.$gray-800;
-  //  }
-  //  
-  //  &:focus {
-  //    border-color: rgba(bootstrap.$primary, 0.6);
-  //  }
-  //}
+  &.file-uploaded {
+    background-color: bootstrap.$info-bg-subtle;
+    border-color: bootstrap.$info;
+
+    i {
+      color: bootstrap.$gray-700;
+    }
+
+    &:has(input[type="file"]:focus) {
+      background-color: bootstrap.$info-bg-subtle;
+      border-color: bootstrap.$primary;
+      
+      i {
+        color: bootstrap.$gray-800;
+      }
+    }
+  }
 }
