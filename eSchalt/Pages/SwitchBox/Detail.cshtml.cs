@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using eSchalt.Backend;
 using eSchalt.Backend.Repositories;
 using eSchalt.Frontend.Classes.Models;
-using eSchalt.Frontend.Classes.Utilities;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 
@@ -43,6 +42,12 @@ public class DetailpageModel : PageModel
     private void UpdateImage()
     {
         ImagePath = FileName != null ? ImageFolder + FileName : DefaultImage;
+        if (!System.IO.File.Exists("wwwroot/" + ImagePath))
+        {
+            ImagePath = DefaultImage;
+            FileName = null;
+        }
+
         using (var image = Image.Load<Rgba32>("wwwroot/" + ImagePath))
         {
             ImageWidth = image.Width;

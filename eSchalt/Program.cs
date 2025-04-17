@@ -2,6 +2,7 @@ using System.Globalization;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using eSchalt.Backend;
+using eSchalt.Frontend.Classes.Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //     options.Configuration = builder.Configuration.GetConnectionString("Redis");
 // });
 // builder.Services.AddSession();
+
+// Tasks
+builder.Services.AddHostedService<UploadCleanUpTask>();
 
 var app = builder.Build();
 
