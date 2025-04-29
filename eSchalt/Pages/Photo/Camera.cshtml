@@ -1,0 +1,70 @@
+@page "/foto/kamera"
+@model eSchalt.Pages.Photo.Camera
+@{
+    ViewData["Title"] = "Kamera";
+}
+
+<div class="container">
+    <form method="post" enctype="multipart/form-data" id="photoForm">
+        <div class="d-flex justify-content-center">
+            <div id="makePhoto" class="camera-wrapper mx-3">
+                <video id="video" class="rounded-top-5 w-100" autoplay></video>
+                <button type="button" id="snap" class="camera-button"></button>
+            </div>
+            <div class="camera-wrapper d-none" id="showPhoto">
+                <canvas id="canvas" class="rounded-top-5"></canvas>
+                <div class="w-100 d-flex justify-content-around">
+                    <button type="button" id="newPhoto" class="bg-transparent text-white border-0 fa-4x">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </button>
+                    <button type="button" id="ok" class="bg-transparent text-white border-0 fa-4x">
+                        <i class="fa-solid fa-check"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="photo" id="photoUpload" required />
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const snapButton = document.getElementById('snap');
+        const makePhoto = document.getElementById('makePhoto')
+        const showPhoto = document.getElementById('showPhoto')
+
+        // Allow camera usage
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                console.error("Error while trying to access the camera: " + err);
+            });
+
+        // Show photo
+        snapButton.addEventListener('click', () => {
+            canvas.width = video.clientWidth
+            canvas.height = video.clientHeight
+            context.drawImage(video, 0, 0, canvas.width, canvas.height)
+            makePhoto.classList.add('d-none')
+            showPhoto.classList.remove('d-none')
+        });
+        
+        // New photo
+        document.getElementById('newPhoto').addEventListener('click', () => {
+            makePhoto.classList.remove('d-none')
+            showPhoto.classList.add('d-none')
+        });
+
+        // Use photo
+        document.getElementById('ok').addEventListener('click', () => {
+            const dataUrl = canvas.toDataURL('image/png');
+            document.getElementById('photoUpload').value = dataUrl;
+            document.getElementById('photoForm').submit();
+        });
+    </script>
+}

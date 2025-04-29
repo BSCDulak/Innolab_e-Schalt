@@ -58,3 +58,5 @@ können nur CSS-Files sein, keine SASS-Files.
 
 ## Dev
 Bilder Koordinaten: https://www.image-map.net/
+
+`dotnet run --launch-profile "https"`
