@@ -41,6 +41,9 @@
             <div class="bg-primary text-white rounded-5 p-4">
                 <h2 class="text-xl font-bold">Allgemeine Informationen</h2>
                 <div class="d-flex">
+                    <div>
+                        @Model.ImageWidth
+                    </div>
                     @if (Model.SwitchBox != null)
                     {
                         <div>
@@ -64,7 +67,20 @@
                     <h2 class="text-xl font-bold">Ausgewählte Komponente:</h2>
                     <div class="fw-bold">Name: @Model.SelectedComponent.Name</div>
                     <div class="fw-bold">Verbunden mit:</div>
-                    <div>...</div>
+                    @if (Model.SelectedComponent.Connections.Count > 0)
+                    {
+                        <ul>
+                            @foreach (Component connection in Model.SelectedComponent.Connections)
+                            {
+                            <li>@connection.Name</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <div>No connections found</div>
+                    }
+                    
                 }
                 else
                 {

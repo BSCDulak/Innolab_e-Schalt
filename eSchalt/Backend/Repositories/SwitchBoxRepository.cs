@@ -11,8 +11,14 @@ public class SwitchBoxRepository
             Floor = "EG",
             Group = "E-DO15"
         };
-        switchBox.Components.Add(new Component(1, "S1", 101, 105, 163, 211));
-        switchBox.Components.Add(new Component(2, "S2", 166, 111, 213, 215));
+        var s1 = new Component(1, "S1", 101, 105, 163, 211);
+        var s2 = new Component(2, "S2", 166, 111, 213, 215);
+        var r1 = new Component(18, "R1", 126, 278, 168, 371);
+        s1.AddConnection(s2);
+        s1.AddConnection(r1);
+        
+        switchBox.Components.Add(s1);
+        switchBox.Components.Add(s2);
         switchBox.Components.Add(new Component(3, "S3", 215, 105, 252, 215));
         switchBox.Components.Add(new Component(4, "S4", 329, 111, 351, 212));
         switchBox.Components.Add(new Component(5, "S5", 353, 111, 372, 211));
@@ -28,7 +34,7 @@ public class SwitchBoxRepository
         switchBox.Components.Add(new Component(15, "S15", 626, 110, 644, 208));
         switchBox.Components.Add(new Component(16, "S16", 645, 107, 664, 205));
         switchBox.Components.Add(new Component(17, "S17", 665, 104, 694, 207));
-        switchBox.Components.Add(new Component(18, "R1", 126, 278, 168, 371));
+        switchBox.Components.Add(r1);
         switchBox.Components.Add(new Component(19, "R2", 169, 277, 207, 370));
         switchBox.Components.Add(new Component(20, "R3", 207, 275, 249, 370));
         switchBox.Components.Add(new Component(21, "R4", 249, 269, 300, 367));

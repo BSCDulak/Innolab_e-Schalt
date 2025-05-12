@@ -17,7 +17,7 @@ public class Component
     public double ButtonWidth { get; set; } = 0;
     public double ButtonHeight { get; set; } = 0;
 
-    public List<Component> Connections { get; set; } = new();
+    public List<Component> Connections { get; } = new();
 
     public Component(int id, string name, int xPos1, int yPos1, int xPos2, int yPos2)
     {
@@ -32,5 +32,11 @@ public class Component
         YPosTopLeft = yPos1;
         XPosBottomRight = xPos2;
         YPosBottomRight = yPos2;
+    }
+
+    public void AddConnection(Component connection)
+    {
+        if (!Connections.Contains(connection))
+            Connections.Add(connection);
     }
 }
