@@ -22,5 +22,41 @@
             <strong>Ausgang:</strong> @Model.AusgangResult
         </div>
     }
+    
+    <h3>Scan QR Code</h3>
+    <div id="reader" style="width: 300px; margin: auto;"></div>
+    <p id="result">Waiting for scan...</p>
 
 </div>
+
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+<script>
+    function onScanSuccess(decodedText, decodedResult) {
+        document.getElementById("result").innerText = `Scanned: ${decodedText}`;
+
+        // You can navigate or use the decodedText as needed
+        if (decodedText.startsWith("http")) {
+            window.location.href = decodedText;
+        }
+    }
+
+    function onScanFailure(error) {
+        // Ignore or log errors
+        // console.warn(`Scan failed: ${error}`);
+    }
+
+    const html5QrCode = new Html5Qrcode("reader");
+
+    html5QrCode.start(
+        { facingMode: "environment" }, // use default camera
+        {
+            fps: 10,
+            qrbox: 250
+        },
+        onScanSuccess,
+        onScanFailure
+    ).catch(err => {
+        console.error("Camera start error:", err);
+    });
+</script>
