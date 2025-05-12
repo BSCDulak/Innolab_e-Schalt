@@ -44,4 +44,24 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var logger = services.GetRequiredService<ILogger<Program>>();
+
+    try
+    {
+        var dbContext = services.GetRequiredService<ApplicationDbContext>();
+        logger.LogInformation("Applying database migrations...");
+        dbContext.Database.Migrate();
+        logger.LogInformation("Database migrations applied successfully.");
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "An error occurred while applying database migrations.");
+        // Exit app on error, alternatively you can log the error and continue if you don't care about the database
+        Environment.Exit(1);
+    }
+}
+
 app.Run();

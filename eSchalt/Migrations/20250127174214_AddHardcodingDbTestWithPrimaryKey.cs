@@ -13,32 +13,6 @@ namespace eSchalt.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "eschaltdemo",
-                columns: table => new
-                {
-                    componentid = table.Column<int>(type: "integer", nullable: true),
-                    stockwerk = table.Column<string>(type: "text", nullable: true),
-                    raum = table.Column<string>(type: "text", nullable: true),
-                    bemerkung = table.Column<string>(type: "text", nullable: true),
-                    fi = table.Column<string>(type: "text", nullable: true),
-                    leiter = table.Column<string>(type: "text", nullable: true),
-                    gruppe = table.Column<string>(type: "text", nullable: true),
-                    sicherung = table.Column<string>(type: "text", nullable: true),
-                    relais = table.Column<string>(type: "text", nullable: true),
-                    dimmer = table.Column<string>(type: "text", nullable: true),
-                    ausgang = table.Column<string>(type: "text", nullable: true),
-                    eingang = table.Column<string>(type: "text", nullable: true),
-                    KabelInfo = table.Column<string>(name: "Kabel Info", type: "text", nullable: true),
-                    typ = table.Column<string>(type: "text", nullable: true),
-                    Info = table.Column<string>(name: "Info ", type: "text", nullable: true),
-                    Beschr = table.Column<string>(name: "Beschr. ", type: "text", nullable: true),
-                    Stockwerkkurz = table.Column<string>(name: "Stockwerk(kurz)", type: "text", nullable: true),
-                    SPSPositionimarray = table.Column<string>(name: "SPS Position im array", type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                });
 
             migrationBuilder.CreateTable(
                 name: "hardcodingdbtest",
@@ -90,9 +64,6 @@ namespace eSchalt.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "eschaltdemo");
-
             migrationBuilder.DropTable(
                 name: "hardcodingdbtest");
         }
