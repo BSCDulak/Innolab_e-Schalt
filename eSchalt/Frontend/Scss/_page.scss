@@ -1,0 +1,36 @@
+@use "bootstrap/scss/bootstrap" as bootstrap;
+
+/*
+ Navbar
+ */
+nav {
+  // Logo
+  .navbar-brand {
+    min-width: 60px;
+    @include bootstrap.media-breakpoint-up(md) {
+      min-width: 75px;
+    }
+
+    &:focus {
+      background-color: transparent;
+    }
+  }
+}
+
+/*
+  Footer
+ */
+main {
+  min-height: 75.5vh; // so that the footer is always at the bottom of the screen or below
+}
+footer {
+  a:not(.btn) {
+    text-decoration: none;
+    &:hover, &:focus {
+      text-decoration: underline;
+    }
+    &:focus {
+      outline-color: white;
+    }
+  }
+}

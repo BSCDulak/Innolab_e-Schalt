@@ -1,0 +1,81 @@
+@use "bootstrap/scss/bootstrap" as bootstrap;
+
+/*
+ Similar classes to bootstrap
+ */
+.mt-gd, .my-gd {
+  margin-top: 60px !important;
+}
+
+.mt-g, .my-g {
+  margin-top: 30px !important;
+}
+
+.mb-gd, .my-gd {
+  margin-bottom: 60px !important;
+}
+
+.mb-g, .my-g {
+  margin-bottom: 30px !important;
+}
+
+/*
+ Text color match with background
+ */
+.bg-primary {
+  color: white;
+}
+.bg-primary a {
+  color: white;
+}
+
+/*
+ Links
+ */
+a {
+  &:not(.btn):focus {
+    outline: bootstrap.$primary solid 3px;
+    outline-offset: 0;
+    background-color: bootstrap.$primary;
+    color: white;
+  }
+}
+
+/*
+ Buttons
+ */
+.btn {
+  border-width: 3px;
+  
+  &.btn-primary {
+    &:hover, &:focus {
+      color: bootstrap.$primary;
+      background-color: white;
+      border-color: bootstrap.$primary;
+    }
+  }
+
+  &.btn-secondary {
+    &:hover, &:focus {
+      background-color: white;
+      border-color: bootstrap.$secondary;
+    }
+  }
+  
+  &.btn-secondary--inverted {
+    border-color: bootstrap.$secondary;
+    &:hover, &:focus {
+      background-color: bootstrap.$secondary;
+    }
+  }
+}
+
+/*
+ Headlines
+ */
+h1 {
+  border-bottom: bootstrap.$primary solid 5px !important;
+  margin-bottom: 30px;
+  margin-top: 60px;
+  padding-bottom: 1rem;
+}

@@ -1,0 +1,49 @@
+services:
+  eschalt:
+    image: ${DOCKER_REGISTRY-}eschalt
+    container_name: eschalt
+    restart: always
+    depends_on:
+      - eschalt_db
+    build:
+      context: .
+      dockerfile: eSchalt/Docker/Prod.Dockerfile
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+
+  eschalt_db:
+    image: postgres:latest
+    container_name: eschalt_db
+    restart: always
+    environment:
+      - POSTGRES_DB=eschalt
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - eschalt_db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  eschalt_cache:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+        
+  eschalt_proxy:
+    build:
+      context: ./nginx
+      dockerfile: Nginx.Dockerfile
+    restart: always
+    ports:
+      - "80:80"
+      - "8443:443"
+    links:
+      - eschalt
+    environment:
+      - NGINX_HOST=localhost #todo prod
+
+volumes:
+  eschalt_db:
+    

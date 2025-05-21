@@ -1,0 +1,78 @@
+@use "bootstrap/scss/bootstrap" as bootstrap;
+
+/* 
+ Photo upload
+*/
+.border-container--file-upload {
+  position: relative;
+  border: 5px dashed bootstrap.$gray-400;
+
+  &:hover, &:has(input[type="file"]:focus) {
+    border-color: rgba(bootstrap.$primary, 0.6);
+    background-color: bootstrap.$gray-300;
+
+    i {
+      color: bootstrap.$gray-700;
+    }
+  }
+  
+  input[type="file"] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  i {
+    color: bootstrap.$gray-600;
+  }
+
+  /* When an image was uploaded */
+  &.file-uploaded {
+    background-color: bootstrap.$info-bg-subtle;
+    border-color: bootstrap.$info;
+
+    i {
+      color: bootstrap.$gray-700;
+    }
+
+    &:has(input[type="file"]:focus) {
+      background-color: bootstrap.$info-bg-subtle;
+      border-color: bootstrap.$primary;
+      
+      i {
+        color: bootstrap.$gray-800;
+      }
+    }
+  }
+}
+
+/*
+ Camera
+ */
+.camera-button {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 4px solid white;
+  background-color: transparent;
+  margin: 1rem 0;
+  
+  &:active {
+    background-color: #eee;
+  }
+  
+  &:hover {
+    border-color: white;
+  }
+}
+
+.camera-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: bootstrap.$primary;
+  border-radius: bootstrap.$border-radius-xxl;
+}

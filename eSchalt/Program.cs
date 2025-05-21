@@ -1,7 +1,8 @@
+using System.Globalization;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using eSchalt.Backend;
-using eSchalt.Backend.Models;
+using eSchalt.Frontend.Classes.Tasks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,12 +13,25 @@ builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 builder.Services.AddRazorPages();
 #endif
 
+// Set culture
+var cultureInfo = new CultureInfo("en-US");
+CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
 // Register DbContext with PostgreSQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")) 
-    // DefaultConnection is defined in appsettings.json
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Database")) 
 );
 
+// Redis cache
+// builder.Services.AddStackExchangeRedisCache(options =>
+// {
+//     options.Configuration = builder.Configuration.GetConnectionString("Redis");
+// });
+// builder.Services.AddSession();
+
+// Tasks
+builder.Services.AddHostedService<UploadCleanUpTask>();
 
 var app = builder.Build();
 
@@ -41,6 +55,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+// app.UseSession();
 
 app.MapRazorPages();
 

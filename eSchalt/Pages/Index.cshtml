@@ -6,14 +6,15 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome, hit that button!</h1>
-    <p> The demopage will not work unless there is a local table with appropriate collums and data <br/>I yet have to setup something so that the db is just created on build if it doesn't exist already'</p>
+    <p> The button will prolly not work unless the db is setup via pgadmin to output an "ausgang" where "stockwerk" = "OG" and "Sps Position im array" = "155". <br/>I yet have to setup something so that the db is just created on build if it doesn't exist already'</p>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     
     <form method="post">
-        <button type="submit" asp-page-handler="GetAusgang" class="btn btn-primary">Get Ausgang hardcodingDB test</button>
+        <button type="submit" asp-page-handler="GetAusgang" class="btn btn-primary">Get Ausgang</button>
     </form>
-    <br />
-    <a asp-page="/Demopage" class="btn btn-primary">Demo Page localDB test</a>
+    
+    <a asp-page="/Demopage" class="btn btn-primary">Go to Demo Page</a>
+    <a href="/Detail" class="btn btn-primary">Go to Detail Page</a>
 
     <!-- Display the result of the query -->
     @if (!string.IsNullOrEmpty(Model.AusgangResult))
@@ -22,41 +23,5 @@
             <strong>Ausgang:</strong> @Model.AusgangResult
         </div>
     }
-    
-    <h3>Scan QR Code</h3>
-    <div id="reader" style="width: 300px; margin: auto;"></div>
-    <p id="result">Waiting for scan...</p>
 
 </div>
-
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-
-<script>
-    function onScanSuccess(decodedText, decodedResult) {
-        document.getElementById("result").innerText = `Scanned: ${decodedText}`;
-
-        // You can navigate or use the decodedText as needed
-        if (decodedText.startsWith("http")) {
-            window.location.href = decodedText;
-        }
-    }
-
-    function onScanFailure(error) {
-        // Ignore or log errors
-        // console.warn(`Scan failed: ${error}`);
-    }
-
-    const html5QrCode = new Html5Qrcode("reader");
-
-    html5QrCode.start(
-        { facingMode: "environment" }, // use default camera
-        {
-            fps: 10,
-            qrbox: 250
-        },
-        onScanSuccess,
-        onScanFailure
-    ).catch(err => {
-        console.error("Camera start error:", err);
-    });
-</script>

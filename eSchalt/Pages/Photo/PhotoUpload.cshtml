@@ -1,0 +1,52 @@
+@page "/foto/hochladen"
+@model eSchalt.Pages.Photo.PhotoUploadModel
+@{
+    ViewData["Title"] = "Foto hochladen";
+}
+
+<div class="container">
+    <h1>@ViewData["Title"]</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        <div class="text-center">
+            <div class="bg-body-secondary rounded-5 p-4 p-md-5">
+                <div class="border-container--file-upload rounded-5 p-5">
+                    <div class="icons fa-4x">
+                        <i class="fa-solid fa-image" aria-hidden="true"></i>
+                        <span class="sr-only">Bild</span>
+                    </div>
+                    <input type="file" accept=".jpg,.jpeg,.png" id="photoUpload" name="photo" class="rounded-5" required/>
+                    <p id="infoText" class="text-break">Ziehe Dateien hierher oder wähle sie von deinem Computer aus.</p>
+                </div>
+            </div>
+            <button id="uploadButton" class="btn btn-primary mt-4 px-5 py-3" type="submit">Hochladen</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        // Disable / Enable Upload Button
+        const photoInput = document.getElementById('photoUpload')
+        const uploadButton = document.getElementById('uploadButton')
+
+        uploadButton.disabled = true;
+        photoInput.addEventListener('change', () => {
+            uploadButton.disabled = !photoInput.files.length
+        });
+
+        // Change info text to uploaded image
+        const infoText = document.getElementById('infoText')
+        const container = document.getElementsByClassName('border-container--file-upload')[0]
+        photoInput.addEventListener('change', () => {
+
+            if (photoInput.files.length) {
+                infoText.innerHTML = `Bild ausgewählt: <span class="fw-bold">${photoInput.files[0].name}</span>`
+                container.classList.add('file-uploaded')
+            } else {
+                infoText.textContent = 'Ziehe Dateien hierher oder wähle sie von deinem Computer aus.'
+                container.classList.remove('file-uploaded')
+            }
+        });
+    </script>
+}

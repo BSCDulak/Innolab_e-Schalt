@@ -1,19 +1,18 @@
 services:
-  eschalt:
-    restart: no
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    build:
-      dockerfile: eSchalt/Docker/Dev.Dockerfile
-    volumes:
-      - ./eSchalt/Frontend/Scss:/app/Frontend/Scss
-      - ./eSchalt/Pages:/app/Pages
-      
   eschalt_db:
     restart: no
     
-  eschalt_cache:
+  sass:
+    image: node:22-alpine
+    working_dir: /app
     restart: no
-  
-  eschalt_proxy:
-    restart: no
+    volumes:
+      - ./eSchalt/Frontend/Scss:/app/Frontend/Scss
+      - ./eSchalt/wwwroot/css:/app/wwwroot/css
+      - ./eSchalt/wwwroot/webfonts:/app/wwwroot/webfonts
+      - ./eSchalt/package.json:/app/package.json
+      - ./eSchalt/package-lock.json:/app/package-lock.json
+    command: sh -c "npm install && npm run copy:fa && npm run sass:watch"
+
+#  eschalt_cache:
+#    restart: no

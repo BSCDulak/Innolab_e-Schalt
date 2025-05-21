@@ -1,7 +1,23 @@
-@use "../../node_modules/bootstrap/scss/bootstrap" with (
+@use "bootstrap/scss/bootstrap.scss" with (
   $primary: #001b75,
   $secondary: #ffc70d,
   $font-family-base: unquote("Gantari, sans-serif"),
+  $container-max-widths: (
+    sm: 540px,
+    md: 720px,
+    lg: 960px,
+    xl: 1140px,
+    xxl: 1140px
+  ),
+  $info-bg-subtle: #e3faec,
+  $info: #709e81,
 );
 
+@use "@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@use "@fortawesome/fontawesome-free/scss/solid.scss";
+
 @use 'fonts' as fonts;
+@use 'custom' as custom;
+@use 'page' as page;
+@use 'pages/detail' as detail;
+@use 'pages/upload' as upload;
