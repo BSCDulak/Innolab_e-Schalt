@@ -12,11 +12,10 @@
         bool isSwitchBoxSet = !string.IsNullOrEmpty(Request.Cookies["SwitchBoxId"]);
     }
     @* Step 1 *@
-    <div class="rounded-4 p-4 mb-4 border-dotted @(isSwitchBoxSet ? "bg-success" : "border-dotted-primary")">
+    <div class="rounded-4 p-4 mb-4 border-dotted d-flex d-sm-block flex-column @(isSwitchBoxSet ? "bg-success" : "border-dotted-primary")">
         <h2>Schritt 1</h2>
         <div class="text-body-secondary mb-3 fst-italic">Scanne zuerst den QR-Code von deinem Schaltkasten.</div>
         
-        @* TODO page updaten wenn mit branch gemerged wo qr code oben ist *@
         <a asp-page="/Photo/QRCode" class="btn @(isSwitchBoxSet ? "btn-primary" : "btn-secondary")">
             <i class="fa-solid fa-qrcode" aria-hidden="true"></i>
             @(isSwitchBoxSet ? "Neuen " : "")
@@ -30,7 +29,7 @@
         <div class="text-body-secondary mb-3 fst-italic">Mache danach ein Foto oder lade ein Foto hoch.
             Für dieses Foto werden dir alle wichtigen Informationen, Komponenten und Verbindungen angezeigt.</div>
         
-        <div>
+        <div class="d-flex d-sm-block flex-column">
             @if (isSwitchBoxSet)
             {
                 <a asp-page="/Photo/Camera" class="btn btn-secondary">
