@@ -25,14 +25,27 @@ public class DetailpageModel : PageModel
 
     private void Initialize()
     {
-        SwitchBox = _repository.FindById(0);
-        UpdateImage();
+        SwitchBox = null;
+        if (string.IsNullOrEmpty(Request.Cookies["SwitchBoxId"]))
+        {
+            return;
+        }
+        if (int.TryParse(Request.Cookies["SwitchBoxId"], out int switchBoxId))
+        {
+            SwitchBox = _repository.FindById(switchBoxId);
+            UpdateImage();
+        }
     }
 
     public async Task<IActionResult> OnGetAsync(string? fileName)
     {
         FileName = fileName;
         Initialize();
+
+        if (SwitchBox == null)
+        {
+            return RedirectToPage("/Error/NoSwitchBox");
+        }
         
         // SessionUtility.SetObject(HttpContext.Session, "SwitchBox", SwitchBox);
         // HttpContext.Session.SetObject("SwitchBox", SwitchBox);

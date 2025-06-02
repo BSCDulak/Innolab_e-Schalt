@@ -1,0 +1,16 @@
+@page "/qrcode"
+@model eSchalt.Pages.Photo.QRCode
+
+@{
+    ViewData["Title"] = "QR-Code scannen";
+    ViewData["Description"] = "Scanne den QR-Code von deinem Schaltkasten";
+}
+
+@* Demo Seite, die nur dazu dient, um ein cookie für den QR Code zu setzen um zu testen ob es beim Bild upload funktioniert *@
+<div class="container">
+    <h1>@ViewData["Title"]</h1>
+
+    <form method="post">
+        <button id="uploadButton" class="btn btn-secondary" type="submit">QR-Code gescannt</button>
+    </form>
+</div>
