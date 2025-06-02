@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - eSchalt</title>
-    <meta name="@ViewData["Description"]">
+    <meta name="description" content="@ViewData["Description"]">
     <link rel="stylesheet" href="~/css/main.css" asp-append-version="true"/>
 
     @* Favicons *@
@@ -14,6 +14,15 @@
     <link rel="apple-touch-icon" sizes="180x180" href="~/images/favicons/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="eSchalt" />
     <link rel="manifest" href="~/images/favicons/site.webmanifest" />
+
+    @* SEO *@
+    <meta property="og:title" content="Sieh alle Informationen zu deinem Schaltkasten!">
+    <meta property="og:description" content="Einfach einen Schaltkasten scannen und loslegen.">
+    @* TODO when there's a domain *@
+    @* <meta property="og:image" content="https://deine-seite.de/images/logos/Logo-Primary.svg"> *@
+    @* <meta property="og:url" content="https://deine-seite.de/"> *@
+    <meta property="og:type" content="website">
+
 </head>
 <body>
 <header>
