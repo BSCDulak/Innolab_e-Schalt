@@ -1,23 +1,40 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - eSchalt</title>
+    <meta name="description" content="@ViewData["Description"]">
     <link rel="stylesheet" href="~/css/main.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/eSchalt.styles.css" asp-append-version="true"/>
+
+    @* Favicons *@
+    <link rel="icon" type="image/png" href="~/images/favicons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="~/images/favicons/favicon.svg" />
+    <link rel="shortcut icon" href="~/images/favicons/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="~/images/favicons/apple-touch-icon.png" />
+    <meta name="apple-mobile-web-app-title" content="eSchalt" />
+    <link rel="manifest" href="~/images/favicons/site.webmanifest" />
+
+    @* SEO *@
+    <meta property="og:title" content="Sieh alle Informationen zu deinem Schaltkasten!">
+    <meta property="og:description" content="Einfach einen Schaltkasten scannen und loslegen.">
+    @* TODO when there's a domain *@
+    @* <meta property="og:image" content="https://deine-seite.de/images/logos/Logo-Primary.svg"> *@
+    @* <meta property="og:url" content="https://deine-seite.de/"> *@
+    <meta property="og:type" content="website">
+
 </head>
 <body>
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container">
             <a class="navbar-brand" asp-area="" asp-page="/Index">
-                <img src="~/images/logos/Logo-Primary.svg"/>
+                <img src="~/images/logos/Logo-Primary.svg" alt="Logo"/>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            @* <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" *@
+            @*         aria-expanded="false" aria-label="Toggle navigation"> *@
+            @*     <span class="navbar-toggler-icon"></span> *@
+            @* </button> *@
             @* <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between"> *@
             @*     <ul class="navbar-nav flex-grow-1"> *@
             @*         <li class="nav-item"> *@

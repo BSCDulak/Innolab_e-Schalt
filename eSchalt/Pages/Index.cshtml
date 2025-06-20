@@ -1,27 +1,60 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Startseite";
+    ViewData["Description"] = "Lass dir alle Informationen für einen Schaltkasten anzeigen. Einfach einen Schaltkasen scannen und loslegen.";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome, hit that button!</h1>
-    <p> The button will prolly not work unless the db is setup via pgadmin to output an "ausgang" where "stockwerk" = "OG" and "Sps Position im array" = "155". <br/>I yet have to setup something so that the db is just created on build if it doesn't exist already'</p>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    
-    <form method="post">
-        <button type="submit" asp-page-handler="GetAusgang" class="btn btn-primary">Get Ausgang</button>
-    </form>
-    
-    <a asp-page="/Demopage" class="btn btn-primary">Go to Demo Page</a>
-    <a href="/Detail" class="btn btn-primary">Go to Detail Page</a>
+<div class="container text-center">
+    <h1 class="display-4">Willkommen!</h1>
 
-    <!-- Display the result of the query -->
-    @if (!string.IsNullOrEmpty(Model.AusgangResult))
-    {
-        <div>
-            <strong>Ausgang:</strong> @Model.AusgangResult
-        </div>
+    @{
+        bool isSwitchBoxSet = !string.IsNullOrEmpty(Request.Cookies["SwitchBoxId"]);
     }
+    @* Step 1 *@
+    <div class="rounded-4 p-4 mb-4 border-dotted d-flex d-sm-block flex-column @(isSwitchBoxSet ? "bg-success" : "border-dotted-primary")">
+        <h2>Schritt 1</h2>
+        <div class="text-body-secondary mb-3 fst-italic">Scanne zuerst den QR-Code von deinem Schaltkasten.</div>
+        
+        <a asp-page="/Photo/QRCode" class="btn @(isSwitchBoxSet ? "btn-primary" : "btn-secondary")">
+            <i class="fa-solid fa-qrcode" aria-hidden="true"></i>
+            @(isSwitchBoxSet ? "Neuen " : "")
+            QR-Code scannen
+        </a>
+    </div>  
 
+    @* Step 2 *@
+    <div class="rounded-4 p-4 mb-4 border-dotted @(isSwitchBoxSet ? "border-dotted-primary" : "")">
+        <h2>Schritt 2</h2>
+        <div class="text-body-secondary mb-3 fst-italic">Mache danach ein Foto oder lade ein Foto hoch.
+            Für dieses Foto werden dir alle wichtigen Informationen, Komponenten und Verbindungen angezeigt.</div>
+        
+        <div class="d-flex d-sm-block flex-column">
+            @if (isSwitchBoxSet)
+            {
+                <a asp-page="/Photo/Camera" class="btn btn-secondary">
+                    <i class="fa-solid fa-camera" aria-hidden="true"></i>
+                    Kamera
+                </a>
+                <span>oder</span>
+                <a asp-page="/Photo/PhotoUpload" class="btn btn-secondary">
+                    <i class="fa-solid fa-upload" aria-hidden="true"></i>
+                    Foto hochladen
+                </a>
+            }
+            else
+            {
+                <span class="btn btn-disabled">
+                    <i class="fa-solid fa-camera" aria-hidden="true"></i>
+                    Kamera
+                </span>
+                <span>oder</span>
+                <span class="btn btn-disabled">
+                    <i class="fa-solid fa-upload" aria-hidden="true"></i>
+                    Foto hochladen
+                </span>
+            }
+            
+        </div>
+    </div>
 </div>

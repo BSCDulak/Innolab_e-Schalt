@@ -6,8 +6,15 @@ namespace eSchalt.Pages.Photo;
 public class PhotoUploadModel : PageModel
 {
     private const string TempPath = "wwwroot/images/uploads/temp/";
-    
-    public void OnGet() { }
+
+    public IActionResult OnGet()
+    {
+        if (string.IsNullOrEmpty(Request.Cookies["SwitchBoxId"]))
+        {
+            return RedirectToPage("/Error/NoSwitchBox");
+        }
+        return Page();
+    }
     
     public async Task<IActionResult> OnPostAsync(IFormFile? photo)
     {

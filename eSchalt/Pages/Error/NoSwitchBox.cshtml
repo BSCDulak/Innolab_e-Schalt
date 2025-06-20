@@ -1,0 +1,24 @@
+@page "/kein-schaltkasten"
+@model eSchalt.Pages.Error.NoSwitchBox
+
+@{
+    ViewData["Title"] = "Kein Schaltkasten!";
+}
+
+<div class="container">
+    <h1>@ViewData["Title"]</h1>
+    
+    <p>
+        Du siehst diese Seite, da diese Seite die Information benötigt um welchen Schaltkasten es geht.
+        Scanne dafür den QR-Code vom Schaltkasten:
+    </p>
+    <p>
+        <a asp-page="/Photo/QRCode" class="btn btn-secondary">
+            <i class="fa-solid fa-qrcode" aria-hidden="true"></i>
+            QR-Code scannen
+        </a></p>
+    <p class="fst-italic text-body-secondary">
+        Der Schaltkasten wird als Cookie gespeichert. Wenn du den QR-Code schon einmal gescannt hast, kann es sein,
+        dass das Cookie nicht mehr gespeichert wurde und der Schaltkasten noch einmal gescannt werden muss.
+    </p>
+</div>

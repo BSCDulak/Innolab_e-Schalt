@@ -38,5 +38,7 @@ public class Component
     {
         if (!Connections.Contains(connection))
             Connections.Add(connection);
+        if (!connection.Connections.Contains(this))
+            connection.Connections.Add(this);
     }
 }

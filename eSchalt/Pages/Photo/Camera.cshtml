@@ -2,9 +2,11 @@
 @model eSchalt.Pages.Photo.Camera
 @{
     ViewData["Title"] = "Kamera";
+    ViewData["Description"] = "Mach ein Foto von einem Schaltkasten.";
 }
 
 <div class="container">
+    <div class="mb-4">@await Html.PartialAsync("_ReturnToHomepage")</div>
     <form method="post" enctype="multipart/form-data" id="photoForm">
         <div class="d-flex justify-content-center">
             <div id="makePhoto" class="camera-wrapper mx-3">
@@ -23,7 +25,7 @@
                 </div>
             </div>
         </div>
-        <input type="hidden" name="photo" id="photoUpload" required />
+        <input type="hidden" name="photo" id="photoUpload" required/>
     </form>
 </div>
 

@@ -2,11 +2,13 @@
 @model eSchalt.Pages.Photo.PhotoUploadModel
 @{
     ViewData["Title"] = "Foto hochladen";
+    ViewData["Description"] = "Lade ein Foto von einem Schaltkasten hoch.";
 }
 
 <div class="container">
     <h1>@ViewData["Title"]</h1>
 
+    <div class="mb-4">@await Html.PartialAsync("_ReturnToHomepage")</div>
     <form method="post" enctype="multipart/form-data">
         <div class="text-center">
             <div class="bg-body-secondary rounded-5 p-4 p-md-5">

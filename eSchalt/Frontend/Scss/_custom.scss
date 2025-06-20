@@ -55,6 +55,14 @@ a {
     }
   }
 
+  &.btn-primary--inverted {
+    border-color: bootstrap.$primary;
+    &:hover, &:focus {
+      background-color: bootstrap.$primary;
+      color: white;
+    }
+  }
+
   &.btn-secondary {
     &:hover, &:focus {
       background-color: white;
@@ -68,6 +76,15 @@ a {
       background-color: bootstrap.$secondary;
     }
   }
+  
+  &.btn-disabled {
+    background-color: bootstrap.$gray-300;
+    cursor: default;
+    &:active {
+      border-color: bootstrap.$gray-300;
+      background-color: bootstrap.$gray-300;
+    }
+  }
 }
 
 /*
@@ -78,4 +95,15 @@ h1 {
   margin-bottom: 30px;
   margin-top: 60px;
   padding-bottom: 1rem;
+}
+
+/*
+  Border
+ */
+.border-dotted {
+  border: 5px dashed bootstrap.$gray-400;
+}
+
+.border-dotted-primary {
+  border-color: rgba(bootstrap.$primary, 0.6);
 }

@@ -10,7 +10,14 @@ public class Camera : PageModel
     [BindProperty]
     public string Photo { get; set; } = string.Empty;
 
-    public void OnGet() { }
+    public IActionResult OnGet()
+    {
+        if (string.IsNullOrEmpty(Request.Cookies["SwitchBoxId"]))
+        {
+            return RedirectToPage("/Error/NoSwitchBox");
+        }
+        return Page();
+    }
     
     public async Task<IActionResult> OnPostAsync()
     {
