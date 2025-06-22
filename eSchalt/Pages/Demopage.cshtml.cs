@@ -35,7 +35,7 @@ public class DemopageModel : PageModel
         try
         {
             // Query the database to find the component
-            var result = await _context.Eschalttabledemo
+            var result = await _context.HardcodingDbTest
                 .Where(e => e.ComponentId == componentId) 
                 .FirstOrDefaultAsync();
 
