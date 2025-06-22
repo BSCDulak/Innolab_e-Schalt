@@ -13,7 +13,7 @@ public class DetailpageModel : PageModel
     private readonly ApplicationDbContext _context;
     private const string ImageFolder = "images/uploads/temp/";
     private const string DefaultImage = "images/electrical_cabinets/demopage.jpg";
-    private readonly SwitchBoxRepository _repository = new();
+    private readonly SwitchBoxRepository _repository;
     
     public string ImagePath { get; private set; }
     public string? FileName { get; set; }
@@ -22,6 +22,12 @@ public class DetailpageModel : PageModel
 
     public Frontend.Classes.Models.SwitchBox? SwitchBox { get; private set; }
     public Component? SelectedComponent { get; private set; }
+
+    public DetailpageModel(ApplicationDbContext context)
+    {
+        _context = context;
+        _repository = new SwitchBoxRepository(_context);
+    }
 
     private void Initialize()
     {

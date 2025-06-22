@@ -30,9 +30,9 @@ public class IndexModel : PageModel
 
     public async Task<IActionResult> OnPostGetAusgangAsync()
     {
-        // Query the database to find the first row where Stockwerk(kurz) = 'OG' and SPS Position im array = '155'
-        var result = await _context.Eschalttabledemo
-            .Where(e => e.StockwerkKurz == "OG" && e.SpsPositionImArray == "155")
+        // Query the database
+        var result = await _context.HardcodingDbTest
+            .Where(e => e.SpsPositionImArray == "1")
             .FirstOrDefaultAsync(); // Get the first entry or null if no match
 
         // Check if a result was found

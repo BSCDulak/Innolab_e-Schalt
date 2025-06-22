@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using eSchalt.Backend;
 using eSchalt.Backend.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eSchalt.Pages;
-
+[Authorize]
 public class DemopageModel : PageModel
 {
     private readonly ApplicationDbContext _context;
@@ -35,7 +36,7 @@ public class DemopageModel : PageModel
         try
         {
             // Query the database to find the component
-            var result = await _context.Eschalttabledemo
+            var result = await _context.HardcodingDbTest
                 .Where(e => e.ComponentId == componentId) 
                 .FirstOrDefaultAsync();
 
