@@ -57,6 +57,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+// for Identity
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -64,14 +65,7 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
-// this code doesn�t work anymore if we start via http. It used to work with docker-compose build and docker-compose up.
-// Even dotnet ef database update is not working anymore.
-// and when I try to conect to the database via demopage it says "Host is unreachable".
-// I figured out that the changes in the docker-compose.yml file are the reason for the host being unreachable. I reverted the changes in the docker-compose.yml file.
-// This means that the sasswatcher and the upload cleaning task will not work at this moment.
-// Since I have no good ideas why this problem exists I will focus on other things for now.
-
-
+// run the database migrations
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -87,9 +81,7 @@ using (var scope = app.Services.CreateScope())
     catch (Exception ex)
     {
         logger.LogError(ex, "An error occurred while applying database migrations.");
-        // Exit app on error, alternatively you can log the error and continue if you don't care about the migration not being applied.
-        // Currently the migrations work only on docker-compose build/up but will break on running http (which I am not doing at the moment since I am using docker-compos up for all).
-        //Environment.Exit(1);
+        Environment.Exit(1);
     }
 }
 

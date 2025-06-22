@@ -72,6 +72,10 @@ Wenn man die dotnet tools noch nicht hat, muss man die tools installieren damit 
 dotnet tool install --global dotnet-ef
 dies muss man ein mal pro PC machen und ist unabhängig vom Projekt.
 
+User authentication wird mit ASP.NET Core Identity gemacht, siehe:
+For setup and configuration information, see https://go.microsoft.com/fwlink/?linkid=2116645.
+
+
 Um Inhalte (Nicht Struktur! Das macht man mit migrations) leichter zu verändern ist pgadmin4 sehr hilfreich.
 
 Verbindung mit pgadmin4 im docker: 

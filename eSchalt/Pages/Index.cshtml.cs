@@ -28,23 +28,4 @@ public class IndexModel : PageModel
     {
     }
 
-    public async Task<IActionResult> OnPostGetAusgangAsync()
-    {
-        // Query the database
-        var result = await _context.HardcodingDbTest
-            .Where(e => e.SpsPositionImArray == "1")
-            .FirstOrDefaultAsync(); // Get the first entry or null if no match
-
-        // Check if a result was found
-        if (result != null)
-        {
-            AusgangResult = result.Ausgang; // Set the Ausgang value
-        }
-        else
-        {
-            AusgangResult = "No matching entry found."; // If no match is found
-        }
-
-        return Page(); // Return the page with the updated model data
-    }
 }
