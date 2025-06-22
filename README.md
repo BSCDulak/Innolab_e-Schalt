@@ -4,8 +4,8 @@
 ### Docker
 ```shell
 docker-compose up -d
-docker-compose up --build -d
 docker exec -it eschalt bash
+dotnet ef migrations add IrgendeinMigrationName
 ```
 
 ## Setup
@@ -43,7 +43,7 @@ Docker container starten : `docker-compose up`
 
 *-d lässt die container im Hintergrund laufen*
 
-Website ist lokal unter `https://localhost:5000` aufrufbar nachdem man es in visual studio 2022 oder einer Alternative als http gestartet hat.
+Website ist lokal unter `https://localhost:5000` aufrufbar, nachdem man es in visual studio 2022 oder einer Alternative als http gestartet hat.
 
 
 ## Frontend
@@ -61,15 +61,16 @@ können nur CSS-Files sein, keine SASS-Files.
 Das Compilen funktioniert nur in der Dev-Umgebung, in der Prod-Umgebung nicht.
 
 ## Backend
-
+Es handelt sich um eine postgres Datenbank die in Docker läuft. Dafür muss Docker (Desktop) gestartet sein.
 Die Struktur der tables ist in Backend/Models zu erkennen, der gemappte Name der table in Backend/DBContext.cs 
 Die Datenbank hat standardmäßig die tables beim runnen von http über die migratinos bekommen und hat ein paar test Werte.
 Änderungen im model muss man mit 
 dotnet ef migrations add IrgendeinMigrationName 
 registrieren sodass sie beim nächsten build/run über https automatisch an die Datenbank angewandt warden.
 Dafür muss natürlich die DB auch mit docker-compose up schon laufen.
-Wenn man sie noch nicht hat, muss man die tools installieren damit der dotnet Befehl funktioniert:
+Wenn man die dotnet tools noch nicht hat, muss man die tools installieren damit der dotnet Befehl funktioniert:
 dotnet tool install --global dotnet-ef
+dies muss man ein mal pro PC machen und ist unabhängig vom Projekt.
 
 Um Inhalte (Nicht Struktur! Das macht man mit migrations) leichter zu verändern ist pgadmin4 sehr hilfreich.
 
@@ -77,7 +78,7 @@ Verbindung mit pgadmin4 im docker:
 docker run --name pgadmin_container -e PGADMIN_DEFAULT_EMAIL=irgendeinenusername -e PGADMIN_DEFAULT_PASSWORD=irgendeinpassword -p 5050:80 -d dpage/pgadmin4
 username und pw verwendet man um sich im pgadmin4 container anzumelden als superuser und dann kann man
 Server registrieren:	 
-Connection: "Host name/address" host.docker.internal, "Port" 5432, "Username" siehe appsettings.json
+Connection: "Host name/address" host.docker.internal, "Port" 5432, "Username", alle infos: siehe appsettings.json
 Rest bleibt Standard. 
 
 ## Dev
