@@ -60,6 +60,10 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+// this code doesn´t work anymore if we start via http. It used to work with docker-compose build and docker-compose up.
+// Even dotnet ef database update is not working anymore.
+
+/*
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -79,5 +83,5 @@ using (var scope = app.Services.CreateScope())
         Environment.Exit(1);
     }
 }
-
+*/
 app.Run();
