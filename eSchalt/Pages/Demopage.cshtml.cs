@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using eSchalt.Backend;
 using eSchalt.Backend.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eSchalt.Pages;
-
+[Authorize]
 public class DemopageModel : PageModel
 {
     private readonly ApplicationDbContext _context;
