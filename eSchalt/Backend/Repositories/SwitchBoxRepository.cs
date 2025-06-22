@@ -1,6 +1,8 @@
 using eSchalt.Frontend.Classes.Models;
 using eSchalt.Backend.Models;
 using Microsoft.EntityFrameworkCore;
+using BackendSwitchBox = eSchalt.Backend.Models.SwitchBox; // this could be removed but I´ll leave it here for reference and possible future use
+using FrontendSwitchBox = eSchalt.Frontend.Classes.Models.SwitchBox;
 
 namespace eSchalt.Backend.Repositories;
 
@@ -12,7 +14,7 @@ public class SwitchBoxRepository
         _context = context;
     }
 
-    public SwitchBox? FindById(int id)
+    public FrontendSwitchBox? FindById(int id)
     {
         // Load SwitchBox with Components and their connections
         var dbSwitchBox = _context.SwitchBoxes
@@ -44,7 +46,7 @@ public class SwitchBoxRepository
         }
 
         // Map SwitchBox
-        var frontendSwitchBox = new SwitchBox
+        var frontendSwitchBox = new FrontendSwitchBox
         {
             Floor = dbSwitchBox.Floor,
             Room = dbSwitchBox.Room,
