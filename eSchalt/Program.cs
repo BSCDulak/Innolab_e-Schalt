@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using eSchalt.Backend;
 using eSchalt.Frontend.Classes.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,8 @@ CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database")) 
 );
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Redis cache
 // builder.Services.AddStackExchangeRedisCache(options =>
@@ -54,13 +57,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 // app.UseSession();
 
 app.MapRazorPages();
 
-// this code doesn´t work anymore if we start via http. It used to work with docker-compose build and docker-compose up.
+// this code doesnï¿½t work anymore if we start via http. It used to work with docker-compose build and docker-compose up.
 // Even dotnet ef database update is not working anymore.
 // and when I try to conect to the database via demopage it says "Host is unreachable".
 // I figured out that the changes in the docker-compose.yml file are the reason for the host being unreachable. I reverted the changes in the docker-compose.yml file.

@@ -1,9 +1,10 @@
 ﻿using eSchalt.Backend.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace eSchalt.Backend
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
         // Constructor to pass options to the base class
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
