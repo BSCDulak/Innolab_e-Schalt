@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 11
+names: ['Dimmer', 'FI', 'FI_Sicherungskombi', 'Klemmenleiste', 'Leistungsschutz', 'Leitungsschutzschalter', 'Relais', 'SPS_System_Steuerungskomponente', 'Sicherungen_230V', 'Sicherungen_400V', 'Verbinder']
+
+roboflow:
+  workspace: schaltksten
+  project: polygontest
+  version: 1
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/schaltksten/polygontest/dataset/1
