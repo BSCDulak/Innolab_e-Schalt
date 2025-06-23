@@ -80,7 +80,7 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex)
     {
-        logger.LogError(ex, "An error occurred while applying database migrations.");
+        logger.LogError(ex, "An error occurred while applying database migrations. Most likely docker desktop is not started and docker-compose up command was not written");
         Environment.Exit(1);
     }
 }
