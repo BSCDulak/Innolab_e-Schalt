@@ -12,7 +12,7 @@ public class DemopageModel : PageModel
     private readonly ApplicationDbContext _context;
 
     // Property to hold the result
-    public string ComponentInfo { get; set; }
+    public required string ComponentInfo { get; set; }
 
     public DemopageModel(ApplicationDbContext context)
     {
