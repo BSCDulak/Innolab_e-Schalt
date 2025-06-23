@@ -82,7 +82,7 @@ Verbindung mit pgadmin4 im docker:
 docker run --name pgadmin_container -e PGADMIN_DEFAULT_EMAIL=irgendeinenusername -e PGADMIN_DEFAULT_PASSWORD=irgendeinpassword -p 5050:80 -d dpage/pgadmin4
 username und pw verwendet man um sich im pgadmin4 container anzumelden als superuser und dann kann man
 Server registrieren:	 
-Connection: "Host name/address" host.docker.internal, "Port" 5432, "Username", alle infos: siehe appsettings.json
+Connection: "Host name/address" host.docker.internal, "Port" 5432, "Username_TestMergeConflict", alle infos: siehe appsettings.json
 Rest bleibt Standard. 
 
 ## Dev
