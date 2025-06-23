@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 12
+names: ['Dimmer', 'FI', 'FI_Sicherungskombi', 'Klemmenleiste', 'Leistungsschutz', 'Leitungsschutzschalter', 'Relais', 'SPS_System_Steuerungskomponente', 'Sicherungen_230V', 'Sicherungen_400V', 'Verbinder', 'netzteile']
+
+roboflow:
+  workspace: schaltksten
+  project: schaltkasten-erkennung
+  version: 2
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/schaltksten/schaltkasten-erkennung/dataset/2
