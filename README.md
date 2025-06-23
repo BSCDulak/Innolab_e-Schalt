@@ -9,6 +9,10 @@ dotnet ef migrations add IrgendeinMigrationName
 ```
 
 ## Setup
+### Prequesites
+Nodejs (damit npm läuft) muss installiert sein
+https://nodejs.org/en/download
+
 ### Zertifikat
 
 Das Projekt verwendet ein Setup, was einem Produktiv Setup sehr ähnlich ist.
@@ -82,7 +86,7 @@ Verbindung mit pgadmin4 im docker:
 docker run --name pgadmin_container -e PGADMIN_DEFAULT_EMAIL=irgendeinenusername -e PGADMIN_DEFAULT_PASSWORD=irgendeinpassword -p 5050:80 -d dpage/pgadmin4
 username und pw verwendet man um sich im pgadmin4 container anzumelden als superuser und dann kann man
 Server registrieren:	 
-Connection: "Host name/address" host.docker.internal, "Port" 5432, "Username", alle infos: siehe appsettings.json
+Connection: Host name/address: host.docker.internal, Port: 5432, Username und Passwort, siehe: appsettings.json bzw appsettings.Development.json je nach environment.
 Rest bleibt Standard. 
 
 ## Dev
