@@ -94,3 +94,42 @@ Bilder Koordinaten: https://www.image-map.net/
 
 `dotnet run --launch-profile "https"`
 
+
+
+## KI CONTAINER
+
+## Voraussetzungen
+- Docker installiert
+- Docker Desktop gestartet und eingeloggt
+
+## Inhalt
+`Dockerfile` - die Docker-Definition zum Erstellen des Containers
+`predict_single.py` - führt Inferenz mit `best.pt` aus
+`requirements.txt` - Datei mit den benötigten Python-Bibliotheken
+`best.pt` - das trainierte YOLOv8-Modell
+`testBild.jpg` - ein Beispielbild aus den Trainingsdaten (nur zu Testzwecken, ob alles noch funktioniert wie es sollte)
+
+## Build
+In dem Ordner, in dem sich die Dateien oben befinden die bash öffnen und folgenden Command ausführen:
+```shell
+docker build -t yolo-infer .
+```
+
+## Test mit dem Testbild ausführen
+Dazu folgenden Command in die bash eingeben:
+```shell
+docker run --rm -v ${PWD}:/app yolo-infer python predict_single.py testBild.jpg
+```
+
+## Export und Import des Images
+Wenn man das Image auf seinem Rechner exportieren möchte gibt man diesen Command in die bash ein:
+```shell
+docker save yolo-infer -o yolo-infer.tar
+```
+
+Und wenn man das Image auf einen anderen Rechner importieren will, gibt man folgendes auf den jeweiligen Rechner ein:
+```shell
+docker load -i yolo-infer.tar
+```
+
+
