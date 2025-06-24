@@ -62,10 +62,10 @@ public class SwitchBoxRepository
     // {
     //     var yoloHelper = new YoloHelper();
 
-    //     // Übergabe des Bildes an die KI
+    //     Übergabe des Bildes an die KI
     //     var result = await yoloHelper.AnalyzeImageAsync(imageFile);
 
-    //     // Was ich noch machen muss: Analyseergebnis weiterverarbeiten
+    //     Was ich noch machen muss: Analyseergebnis weiterverarbeiten
 
     //     return result;
     // }
