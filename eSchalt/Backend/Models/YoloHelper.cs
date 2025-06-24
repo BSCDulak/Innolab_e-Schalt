@@ -16,7 +16,7 @@ namespace Backend.Models
             // docker run --rm -v ${PWD}:/app yolo-infer python predict_single.py [bildpfad]
 
             // Hier: Ergebnisdateien einlesen (runs/segment/predict/labels)
-            // Bounding Boxes extrahieren und Komponenten-ID zuordnen
+            // Boxen extrahieren und Komponenten-ID zuordnen
 
             return "Analyseergebnis (Platzhalter)";
         }
