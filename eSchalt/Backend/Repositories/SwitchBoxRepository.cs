@@ -57,7 +57,7 @@ public class SwitchBoxRepository
         return frontendSwitchBox;
     }
 
-    // Vorbereitung: KI-Bildanalyse
+    // Vorbereitung zur KI-Bildanalyse
     // public async Task<string> AnalyzeSwitchBoxImageAsync(IFormFile imageFile)
     // {
         // var yoloHelper = new YoloHelper();
