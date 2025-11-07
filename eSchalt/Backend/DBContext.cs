@@ -17,6 +17,7 @@ namespace eSchalt.Backend
         public DbSet<SwitchBox> SwitchBoxes { get; set; }
         public DbSet<Component> Components { get; set; }
         public DbSet<ComponentConnection> ComponentConnections { get; set; }
+        public DbSet<SwitchBoxQRLink> SwitchBoxQRLinks { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // this can be changed later if we add a primary key for example a hash value base on
@@ -63,6 +64,14 @@ namespace eSchalt.Backend
                 .HasForeignKey(cc => cc.ToComponentId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // SwitchBox-SwitchBoxQRLink one-to-many, if we want to only have one QR link per switchbox, we can change this to .WithOne() instead of .WithMany()
+            modelBuilder.Entity<SwitchBoxQRLink>()
+                .HasOne(q => q.SwitchBox)
+                .WithMany()
+                .HasForeignKey(q => q.SwitchBoxId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
             // Seed SwitchBox
             modelBuilder.Entity<SwitchBox>().HasData(
                 new SwitchBox { Id = 1, Floor = "EG", Group = "E-DO15", Room = "", Type = "" }
@@ -105,6 +114,16 @@ namespace eSchalt.Backend
                 new ComponentConnection { Id = 2, FromComponentId = 1, ToComponentId = 19 },
                 new ComponentConnection { Id = 3, FromComponentId = 2, ToComponentId = 19 }
             );
+
+            modelBuilder.Entity<SwitchBoxQRLink>().HasData(
+                new SwitchBoxQRLink
+                {
+                    Id = 1,
+                    SwitchBoxId = 1,
+                    QRLink = "32fe4380-615b-4ed7-8622-a981303264dc.png"
+                }
+            );
+
 
             base.OnModelCreating(modelBuilder);
         }

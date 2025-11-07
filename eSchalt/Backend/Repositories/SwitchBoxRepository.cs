@@ -56,4 +56,14 @@ public class SwitchBoxRepository
         };
         return frontendSwitchBox;
     }
+
+    public FrontendSwitchBox? FindByFileName(string fileName)
+    {
+        var qrLink = _context.SwitchBoxQRLinks.FirstOrDefault(l => l.QRLink == fileName);
+        if (qrLink == null)
+            return null;
+
+        return FindById(qrLink.SwitchBoxId);
+    }
+
 }

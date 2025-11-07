@@ -11,8 +11,9 @@ namespace eSchalt.Pages.SwitchBox;
 public class DetailpageModel : PageModel
 {
     private readonly ApplicationDbContext _context;
-    private const string ImageFolder = "images/uploads/temp/";
-    private const string DefaultImage = "images/electrical_cabinets/demopage.jpg";
+    private const string PresetFolder = "images/electrical_cabinets/presets/";
+    private const string TempFolder = "images/uploads/temp/";
+    private const string DefaultImage = "images/electrical_cabinets/default.jpg";
     private readonly SwitchBoxRepository _repository;
     
     public string ImagePath { get; private set; }
@@ -46,25 +47,72 @@ public class DetailpageModel : PageModel
     public async Task<IActionResult> OnGetAsync(string? fileName)
     {
         FileName = fileName;
+
+        // Try to find a SwitchBox via fileName from the QR code
+        if (!string.IsNullOrEmpty(fileName))
+        {
+            var switchBox = _repository.FindByFileName(fileName);
+            if (switchBox != null)
+            {
+                SwitchBox = switchBox;
+
+                // Store the SwitchBoxId in a cookie for consistency
+                var qrLink = _context.SwitchBoxQRLinks.FirstOrDefault(l => l.QRLink == fileName);
+                if (qrLink != null)
+                {
+                    Response.Cookies.Append("SwitchBoxId", qrLink.SwitchBoxId.ToString(), new CookieOptions
+                    {
+                        HttpOnly = true,
+                        SameSite = SameSiteMode.Strict
+                    });
+                }
+
+                UpdateImage();
+                return Page();
+            }
+            else
+            {
+                // remove old cookie to prevent issues with old SwitchBox if the link couldn't be associated with a Switchbox in SwitchBoxQRLinks table
+                if (Request.Cookies.ContainsKey("SwitchBoxId"))
+                {
+                    Response.Cookies.Delete("SwitchBoxId");
+                }
+                return RedirectToPage("/Error/NoSwitchBox");
+            }
+        }
+
+        // Fall back to cookie-based logic if no fileName provided, e.g. if the QR-Code just directs to the details page with no filename provided.
+        // This means that someone can use their last cookie, this can prolly be useful for redirect shenanigans but might cause issues if an old cookie
+        // should have been removed instead.
         Initialize();
 
         if (SwitchBox == null)
         {
             return RedirectToPage("/Error/NoSwitchBox");
         }
-        
-        // SessionUtility.SetObject(HttpContext.Session, "SwitchBox", SwitchBox);
-        // HttpContext.Session.SetObject("SwitchBox", SwitchBox);
+
         return Page();
     }
 
     private void UpdateImage()
     {
-        ImagePath = FileName != null ? ImageFolder + FileName : DefaultImage;
-        if (!System.IO.File.Exists("wwwroot/" + ImagePath))
+        // Default values
+        ImagePath = DefaultImage;
+
+        if (!string.IsNullOrEmpty(FileName))
         {
-            ImagePath = DefaultImage;
-            FileName = null;
+            // First check Preset folder
+            var presetPath = Path.Combine("wwwroot", PresetFolder, FileName);
+            var tempPath = Path.Combine("wwwroot", TempFolder, FileName);
+
+            if (System.IO.File.Exists(presetPath))
+            {
+                ImagePath = PresetFolder + FileName;
+            }
+            else if (System.IO.File.Exists(tempPath))
+            {
+                ImagePath = TempFolder + FileName;
+            }
         }
 
         using (var image = Image.Load<Rgba32>("wwwroot/" + ImagePath))

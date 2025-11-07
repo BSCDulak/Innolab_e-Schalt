@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using eSchalt.Backend;
 using eSchalt.Frontend.Classes.Tasks;
 using Microsoft.AspNetCore.Identity;
+using eSchalt.Backend.HelperClasses;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,6 +78,9 @@ using (var scope = app.Services.CreateScope())
         logger.LogInformation("Applying database migrations...");
         dbContext.Database.Migrate();
         logger.LogInformation("Database migrations applied successfully.");
+        DynamicDataSeeder.EnsureSeedData(dbContext);
+        logger.LogInformation("Database seeding completed successfully.");
+
     }
     catch (Exception ex)
     {
