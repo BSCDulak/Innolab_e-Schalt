@@ -34,7 +34,7 @@ namespace eSchalt.Migrations
             migrationBuilder.InsertData(
                 table: "SwitchBoxQRLinks",
                 columns: new[] { "Id", "QRLink", "SwitchBoxId" },
-                values: new object[] { 1, "http://localhost:5000/detail?fileName=32fe4380-615b-4ed7-8622-a981303264dc.png", 1 });
+                values: new object[] { 1, "32fe4380-615b-4ed7-8622-a981303264dc.png", 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_SwitchBoxQRLinks_SwitchBoxId",

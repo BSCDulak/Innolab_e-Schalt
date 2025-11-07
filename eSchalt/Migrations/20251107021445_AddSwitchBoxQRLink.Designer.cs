@@ -12,7 +12,7 @@ using eSchalt.Backend;
 namespace eSchalt.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251106235119_AddSwitchBoxQRLink")]
+    [Migration("20251107021445_AddSwitchBoxQRLink")]
     partial class AddSwitchBoxQRLink
     {
         /// <inheritdoc />
@@ -1010,7 +1010,7 @@ namespace eSchalt.Migrations
                         new
                         {
                             Id = 1,
-                            QRLink = "http://localhost:5000/detail?fileName=32fe4380-615b-4ed7-8622-a981303264dc.png",
+                            QRLink = "32fe4380-615b-4ed7-8622-a981303264dc.png",
                             SwitchBoxId = 1
                         });
                 });

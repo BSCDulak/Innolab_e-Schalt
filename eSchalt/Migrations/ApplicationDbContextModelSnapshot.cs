@@ -1007,7 +1007,7 @@ namespace eSchalt.Migrations
                         new
                         {
                             Id = 1,
-                            QRLink = "http://localhost:5000/detail?fileName=32fe4380-615b-4ed7-8622-a981303264dc.png",
+                            QRLink = "32fe4380-615b-4ed7-8622-a981303264dc.png",
                             SwitchBoxId = 1
                         });
                 });

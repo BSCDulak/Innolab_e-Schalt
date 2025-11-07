@@ -6,7 +6,7 @@
     ViewData["Description"] = "Scanne den QR-Code von deinem Schaltkasten";
 }
 
-@* Demo Seite, die nur dazu dient, um ein cookie für den QR Code zu setzen um zu testen ob es beim Bild upload funktioniert *@
+@* Hier wird der QR-Code gescannt. Die Details page handelt dann welche SwitchBox das ist*@
 <div class="container">
     <h1>@ViewData["Title"]</h1>
 
@@ -22,21 +22,33 @@
     function onScanSuccess(decodedText, decodedResult) {
         document.getElementById("result").innerText = `Scanned: ${decodedText}`;
 
-        // You can navigate or use the decodedText as needed
+        // Determine if it's relative or absolute
+        let targetUrl;
         if (decodedText.startsWith("http")) {
-            window.location.href = decodedText;
+            // Absolute URL -> just redirect
+            targetUrl = decodedText;
+        } else if (decodedText.startsWith("/")) {
+            // Relative URL -> prepend current host, this means we are not bound to just localhost for future changes
+            targetUrl = window.location.origin + decodedText;
+        } else {
+            // If it’s just a filename, assume it's the file in /detail, this is just convenient fluff
+            targetUrl = `/detail?fileName=${encodeURIComponent(decodedText)}`;
+            targetUrl = window.location.origin + targetUrl;
         }
+
+        // Redirect to the target URL
+        window.location.href = targetUrl;
     }
 
     function onScanFailure(error) {
-        // Ignore or log errors
+        // Optional: log scan failures
         // console.warn(`Scan failed: ${error}`);
     }
 
     const html5QrCode = new Html5Qrcode("reader");
 
     html5QrCode.start(
-        { facingMode: "environment" }, // use default camera
+        { facingMode: "environment" }, // use back camera
         {
             fps: 10,
             qrbox: 250
@@ -47,8 +59,4 @@
         console.error("Camera start error:", err);
     });
 </script>
-
-    <form method="post">
-        <button id="uploadButton" class="btn btn-secondary" type="submit">QR-Code gescannt</button>
-    </form>
 </div>
