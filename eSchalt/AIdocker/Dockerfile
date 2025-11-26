@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Arbeitsverzeichnis im Container festlegen (also alle Befehle laufen im Ordner /app
-WORKDIR /app)
+WORKDIR /app
 
 # Kopiert unsere requirements vom Textfile in den Container und wir installieren diese dann
 COPY requirements.txt .
@@ -18,5 +18,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Alle restlichen Sachen (zB best.pt, das Testbild usw.) werden auch in den Container kopiert
 COPY . .
 
+# Expose FastAPI port
+EXPOSE 8000
+
 # Wenn jemand das Image startet wird der Befehl automatisch ausgeführt (kann/muss man noch ändern)
-CMD ["python", "predict_single.py", "testBild.jpg"]
+# CMD ["python", "predict_single.py", "testBild.jpg"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
