@@ -16,3 +16,5 @@ class PredictionResponse(BaseModel):
     components: List[Component]
     imageWidth: int
     imageHeight: int
+    warnings: List[str] = []
+

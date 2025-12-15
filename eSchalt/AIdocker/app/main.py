@@ -1,10 +1,11 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
-import os
+# import os
 
 from .yolo_service import YoloService
 from .schemas import PredictionResponse, Component
+from .postprocessing import validate_layout
 
 app = FastAPI(title="eSchalt AI")
 
@@ -41,8 +42,11 @@ async def predict(file: UploadFile = File(...)):
     img = cv2.imread(temp_path)
     h, w, _ = img.shape
 
+    warnings = validate_layout(detections, w, h)
+
     return PredictionResponse(
         components=components,
         imageWidth=w,
-        imageHeight=h
+        imageHeight=h,
+        warnings=warnings
     )
