@@ -5,6 +5,9 @@ using eSchalt.Backend.Repositories;
 using eSchalt.Frontend.Classes.Models;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using eSchalt.Backend.HelperClasses;
+using eSchalt.Backend.Models.AI;
+
 
 namespace eSchalt.Pages.SwitchBox;
 
@@ -15,7 +18,9 @@ public class DetailpageModel : PageModel
     private const string TempFolder = "images/uploads/temp/";
     private const string DefaultImage = "images/electrical_cabinets/default.jpg";
     private readonly SwitchBoxRepository _repository;
+    private readonly AiClient _aiClient;
     
+    public AiPredictionResponseDto? AiResult { get; private set; }
     public string ImagePath { get; private set; }
     public string? FileName { get; set; }
     public int ImageWidth { get; private set; }
@@ -24,10 +29,11 @@ public class DetailpageModel : PageModel
     public Frontend.Classes.Models.SwitchBox? SwitchBox { get; private set; }
     public Component? SelectedComponent { get; private set; }
 
-    public DetailpageModel(ApplicationDbContext context)
+    public DetailpageModel(ApplicationDbContext context, AiClient aiClient)
     {
         _context = context;
         _repository = new SwitchBoxRepository(_context);
+        _aiClient = aiClient;
     }
 
     private void Initialize()
@@ -68,6 +74,23 @@ public class DetailpageModel : PageModel
                 }
 
                 UpdateImage();
+                // ai communication
+                if (!string.IsNullOrEmpty(FileName))
+                {
+                    var absoluteImagePath = Path.Combine(
+                        "wwwroot",
+                        ImagePath.Replace("/", Path.DirectorySeparatorChar.ToString())
+                    );
+
+                    try
+                    {
+                        AiResult = await _aiClient.PredictFromFileAsync(absoluteImagePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"AI error: {ex.Message}");
+                    }
+                }
                 return Page();
             }
             else
