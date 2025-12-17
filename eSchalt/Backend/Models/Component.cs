@@ -10,10 +10,12 @@ namespace eSchalt.Backend.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public int XPosTopLeft { get; set; }
-        public int YPosTopLeft { get; set; }
-        public int XPosBottomRight { get; set; }
-        public int YPosBottomRight { get; set; }
+
+        // Use double coordinates to preserve exact AI detection positions
+        public double XPosTopLeft { get; set; }
+        public double YPosTopLeft { get; set; }
+        public double XPosBottomRight { get; set; }
+        public double YPosBottomRight { get; set; }
 
         public int SwitchBoxId { get; set; }
         public SwitchBox SwitchBox { get; set; } = null!;
