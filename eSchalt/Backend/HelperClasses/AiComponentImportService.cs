@@ -21,15 +21,20 @@ namespace eSchalt.Backend.HelperClasses
             if (string.IsNullOrWhiteSpace(json))
                 throw new ArgumentException("AI JSON must not be empty.", nameof(json));
 
+            Console.WriteLine($"[AiComponentImportService] Starting import for SwitchBoxId: {switchBoxId}");
+            Console.WriteLine($"[AiComponentImportService] JSON length: {json.Length}");
+
             // 1. Deserialize JSON (throws on invalid)
             AiDetectionResult detection;
             try
             {
                 detection = JsonSerializer.Deserialize<AiDetectionResult>(json)
                              ?? throw new InvalidOperationException("AI JSON contained no data.");
+                Console.WriteLine($"[AiComponentImportService] Deserialized JSON. Found {detection.Components.Count} components");
             }
             catch (JsonException ex)
             {
+                Console.WriteLine($"[AiComponentImportService] JSON deserialization failed: {ex.Message}");
                 throw new InvalidOperationException("Failed to parse AI JSON.", ex);
             }
 
@@ -37,6 +42,7 @@ namespace eSchalt.Backend.HelperClasses
             var switchBox = await _context.SwitchBoxes.FindAsync(switchBoxId);
             if (switchBox == null)
             {
+                Console.WriteLine($"[AiComponentImportService] SwitchBox {switchBoxId} not found, creating new one");
                 switchBox = new SwitchBox
                 {
                     Id = switchBoxId,
@@ -48,11 +54,17 @@ namespace eSchalt.Backend.HelperClasses
 
                 _context.SwitchBoxes.Add(switchBox);
             }
+            else
+            {
+                Console.WriteLine($"[AiComponentImportService] SwitchBox {switchBoxId} exists");
+            }
 
             // 3. Delete existing components for this SwitchBox
             var oldComponents = _context.Components
-                .Where(c => c.SwitchBoxId == switchBoxId);
+                .Where(c => c.SwitchBoxId == switchBoxId)
+                .ToList(); // Materialize the query
 
+            Console.WriteLine($"[AiComponentImportService] Deleting {oldComponents.Count} existing components");
             _context.Components.RemoveRange(oldComponents);
 
             // 4. Insert new components (preserve doubles)
@@ -64,12 +76,15 @@ namespace eSchalt.Backend.HelperClasses
                 XPosBottomRight = c.XPosBottomRight,
                 YPosBottomRight = c.YPosBottomRight,
                 SwitchBoxId = switchBoxId
-            });
+            }).ToList(); // Materialize the list
 
-            await _context.Components.AddRangeAsync(newComponents);
+            Console.WriteLine($"[AiComponentImportService] Adding {newComponents.Count} new components");
+            _context.Components.AddRange(newComponents);
 
             // 5. Commit
-            await _context.SaveChangesAsync();
+            Console.WriteLine($"[AiComponentImportService] Saving changes...");
+            var saved = await _context.SaveChangesAsync();
+            Console.WriteLine($"[AiComponentImportService] SaveChangesAsync returned: {saved} entities saved");
         }
     }
 }
