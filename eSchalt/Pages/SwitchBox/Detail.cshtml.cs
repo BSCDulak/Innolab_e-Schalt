@@ -56,7 +56,7 @@ public class DetailpageModel : PageModel
             {
                 SwitchBox = switchBox;
 
-                // Store the SwitchBoxId in a cookie for consistency
+                // Store the SwitchBoxId in a cookie for consistency and to use when uploading a new image under the assumption it is the same switchbox
                 var qrLink = _context.SwitchBoxQRLinks.FirstOrDefault(l => l.QRLink == fileName);
                 if (qrLink != null)
                 {
@@ -70,20 +70,12 @@ public class DetailpageModel : PageModel
                 UpdateImage();
                 return Page();
             }
-            else
-            {
-                // remove old cookie to prevent issues with old SwitchBox if the link couldn't be associated with a Switchbox in SwitchBoxQRLinks table
-                if (Request.Cookies.ContainsKey("SwitchBoxId"))
-                {
-                    Response.Cookies.Delete("SwitchBoxId");
-                }
-                return RedirectToPage("/Error/NoSwitchBox");
-            }
         }
 
-        // Fall back to cookie-based logic if no fileName provided, e.g. if the QR-Code just directs to the details page with no filename provided.
-        // This means that someone can use their last cookie, this can prolly be useful for redirect shenanigans but might cause issues if an old cookie
-        // should have been removed instead.
+        // Fall back to cookie-based logic if no fileName provided, or if fileName wasn't found in QRLinks
+        // This handles cases where:
+        // - QR-Code just directs to the details page with no filename
+        // - A new photo was uploaded (has fileName but not in QRLinks table)
         Initialize();
 
         if (SwitchBox == null)

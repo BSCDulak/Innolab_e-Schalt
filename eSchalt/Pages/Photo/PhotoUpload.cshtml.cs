@@ -53,14 +53,24 @@ public class PhotoUploadModel : PageModel
                 return RedirectToPage("/Error/NoSwitchBox");
             }
 
-            // Call AI docker to get JSON for this image
-            string aiJson = await CallAiDockerAsync(filePath);
+            try
+            {
+                // Call AI docker to get JSON for this image
+                string aiJson = await CallAiDockerAsync(filePath);
 
-            // Import into DB (throws if JSON invalid)
-            await _aiImportService.ImportComponentsAsync(switchBoxId, aiJson);
+                // Import into DB (throws if JSON invalid)
+                await _aiImportService.ImportComponentsAsync(switchBoxId, aiJson);
 
-            // Show the result on the detail page
-            return RedirectToPage("/SwitchBox/Detail", new { fileName = fileName });
+                // Show the result on the detail page
+                return RedirectToPage("/SwitchBox/Detail", new { fileName = fileName });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error processing photo: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                
+                return RedirectToPage("/Error/NoSwitchBox");
+            }
         }
         
         return Page();
