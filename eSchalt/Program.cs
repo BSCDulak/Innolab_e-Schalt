@@ -25,17 +25,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Database")) 
 );
 
-// Register Ai Client with http 
-
-builder.Services.AddHttpClient<AiClient>(client =>
-{
-    // because of the docker settings --> might be changed!
-    client.BaseAddress = new Uri("http://localhost:8000");
-    client.Timeout = TimeSpan.FromSeconds(120);
-
-});
-
-
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Redis cache
