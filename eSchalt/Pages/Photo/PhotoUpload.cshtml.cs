@@ -1,5 +1,6 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using eSchalt.Backend.HelperClasses;
@@ -57,6 +58,22 @@ public class PhotoUploadModel : PageModel
             {
                 // Call AI docker to get JSON for this image
                 string aiJson = await CallAiDockerAsync(filePath);
+
+                // Save JSON to file alongside the image (same filename with .json extension)
+                // Pretty-print the JSON for easier reading
+                string jsonFileName = Path.ChangeExtension(fileName, ".json");
+                string jsonFilePath = Path.Combine(TempPath, jsonFileName);
+                
+                // Parse and reformat JSON with indentation for readability
+                var jsonDoc = JsonDocument.Parse(aiJson);
+                var options = new JsonSerializerOptions 
+                { 
+                    WriteIndented = true 
+                };
+                string prettyJson = JsonSerializer.Serialize(jsonDoc, options);
+                
+                await System.IO.File.WriteAllTextAsync(jsonFilePath, prettyJson);
+                Console.WriteLine($"[PhotoUpload] Saved pretty-printed AI JSON to: {jsonFilePath}");
 
                 // Import into DB (throws if JSON invalid)
                 await _aiImportService.ImportComponentsAsync(switchBoxId, aiJson);

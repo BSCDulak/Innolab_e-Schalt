@@ -114,7 +114,8 @@ namespace eSchalt.Backend
                 new ComponentConnection { Id = 2, FromComponentId = 1, ToComponentId = 19 },
                 new ComponentConnection { Id = 3, FromComponentId = 2, ToComponentId = 19 }
             );
-
+            // This will cause problems with cascade delete if we delete a component, it will not be able to delete all connections to that component
+            // TODO: Add a cascade delete to the ComponentConnection table
             modelBuilder.Entity<SwitchBoxQRLink>().HasData(
                 new SwitchBoxQRLink
                 {
