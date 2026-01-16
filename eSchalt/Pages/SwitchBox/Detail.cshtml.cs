@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using eSchalt.Backend;
 using eSchalt.Backend.Repositories;
+using eSchalt.Backend.Models;
 using eSchalt.Frontend.Classes.Models;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using FrontendComponent = eSchalt.Frontend.Classes.Models.Component;
 
 namespace eSchalt.Pages.SwitchBox;
 
@@ -20,9 +22,10 @@ public class DetailpageModel : PageModel
     public string? FileName { get; set; }
     public int ImageWidth { get; private set; }
     public int ImageHeight { get; private set; }
+    public bool IsImageInTempFolder { get; private set; }
 
     public Frontend.Classes.Models.SwitchBox? SwitchBox { get; private set; }
-    public Component? SelectedComponent { get; private set; }
+    public FrontendComponent? SelectedComponent { get; private set; }
 
     public DetailpageModel(ApplicationDbContext context)
     {
@@ -90,6 +93,7 @@ public class DetailpageModel : PageModel
     {
         // Default values
         ImagePath = DefaultImage;
+        IsImageInTempFolder = false;
 
         if (!string.IsNullOrEmpty(FileName))
         {
@@ -100,10 +104,12 @@ public class DetailpageModel : PageModel
             if (System.IO.File.Exists(presetPath))
             {
                 ImagePath = PresetFolder + FileName;
+                IsImageInTempFolder = false;
             }
             else if (System.IO.File.Exists(tempPath))
             {
                 ImagePath = TempFolder + FileName;
+                IsImageInTempFolder = true;
             }
         }
 
@@ -114,7 +120,7 @@ public class DetailpageModel : PageModel
         }
 
         // Update percentages for the button for each component
-        foreach (Component component in SwitchBox?.Components ?? [])
+        foreach (FrontendComponent component in SwitchBox?.Components ?? [])
         {
             // Convert absolute pixel positions to percent to be responsive
             component.ButtonTop = (float)component.YPosTopLeft / ImageHeight * 100;
@@ -142,5 +148,94 @@ public class DetailpageModel : PageModel
             SelectedComponent = SwitchBox?.Components.FirstOrDefault(c => c.Id == id);
 
         return Page();
+    }
+
+    public async Task<IActionResult> OnPostSaveSwitchBoxAsync(string? fileName)
+    {
+        if (string.IsNullOrEmpty(fileName))
+        {
+            return RedirectToPage("/Error/NoSwitchBox");
+        }
+
+        // Get SwitchBoxId from cookie
+        if (!Request.Cookies.TryGetValue("SwitchBoxId", out var switchBoxIdStr) ||
+            !int.TryParse(switchBoxIdStr, out var switchBoxId))
+        {
+            return RedirectToPage("/Error/NoSwitchBox");
+        }
+
+        try
+        {
+            var tempImagePath = Path.Combine("wwwroot", TempFolder, fileName);
+            var presetImagePath = Path.Combine("wwwroot", PresetFolder, fileName);
+
+            // Check if image exists in temp folder
+            if (!System.IO.File.Exists(tempImagePath))
+            {
+                Console.WriteLine($"[Detail] Image not found in temp folder: {tempImagePath}");
+                return RedirectToPage("/Error/NoSwitchBox");
+            }
+
+            // Ensure presets directory exists
+            var presetDir = Path.Combine("wwwroot", PresetFolder);
+            if (!Directory.Exists(presetDir))
+            {
+                Directory.CreateDirectory(presetDir);
+            }
+
+            // Move image from temp to presets folder
+            System.IO.File.Move(tempImagePath, presetImagePath, overwrite: true);
+            Console.WriteLine($"[Detail] Moved image from {tempImagePath} to {presetImagePath}");
+
+            // Also move JSON file if it exists
+            var tempJsonPath = Path.ChangeExtension(tempImagePath, ".json");
+            var presetJsonPath = Path.ChangeExtension(presetImagePath, ".json");
+            if (System.IO.File.Exists(tempJsonPath))
+            {
+                System.IO.File.Move(tempJsonPath, presetJsonPath, overwrite: true);
+                Console.WriteLine($"[Detail] Moved JSON from {tempJsonPath} to {presetJsonPath}");
+            }
+
+            // Check if a SwitchBoxQRLink already exists for this filename
+            var existingQRLink = _context.SwitchBoxQRLinks.FirstOrDefault(l => l.QRLink == fileName);
+
+            if (existingQRLink != null)
+            {
+                // Update existing QRLink to point to the current SwitchBoxId
+                if (existingQRLink.SwitchBoxId != switchBoxId)
+                {
+                    Console.WriteLine($"[Detail] Updating existing QRLink {existingQRLink.Id} from SwitchBoxId {existingQRLink.SwitchBoxId} to {switchBoxId}");
+                    existingQRLink.SwitchBoxId = switchBoxId;
+                    _context.SwitchBoxQRLinks.Update(existingQRLink);
+                }
+                else
+                {
+                    Console.WriteLine($"[Detail] QRLink already exists and points to correct SwitchBoxId {switchBoxId}");
+                }
+            }
+            else
+            {
+                // Create new QRLink
+                var newQRLink = new SwitchBoxQRLink
+                {
+                    SwitchBoxId = switchBoxId,
+                    QRLink = fileName
+                };
+                _context.SwitchBoxQRLinks.Add(newQRLink);
+                Console.WriteLine($"[Detail] Created new QRLink for SwitchBoxId {switchBoxId} with QRLink {fileName}");
+            }
+
+            await _context.SaveChangesAsync();
+            Console.WriteLine($"[Detail] Successfully saved SwitchBoxQRLink for fileName {fileName}");
+
+            // Redirect back to detail page with the fileName
+            return RedirectToPage("/SwitchBox/Detail", new { fileName = fileName });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Detail] Error saving switchbox: {ex.Message}");
+            Console.WriteLine($"[Detail] Stack trace: {ex.StackTrace}");
+            return RedirectToPage("/Error/NoSwitchBox");
+        }
     }
 }

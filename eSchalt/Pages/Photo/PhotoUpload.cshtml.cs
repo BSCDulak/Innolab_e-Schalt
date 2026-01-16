@@ -3,7 +3,9 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using eSchalt.Backend;
 using eSchalt.Backend.HelperClasses;
+using eSchalt.Backend.Models;
 
 namespace eSchalt.Pages.Photo;
 
@@ -13,25 +15,26 @@ public class PhotoUploadModel : PageModel
 
     private readonly AiComponentImportService _aiImportService;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly ApplicationDbContext _context;
 
     public PhotoUploadModel(
         AiComponentImportService aiImportService,
-        IHttpClientFactory httpClientFactory)
+        IHttpClientFactory httpClientFactory,
+        ApplicationDbContext context)
     {
         _aiImportService = aiImportService;
         _httpClientFactory = httpClientFactory;
+        _context = context;
     }
 
     public IActionResult OnGet()
     {
-        if (string.IsNullOrEmpty(Request.Cookies["SwitchBoxId"]))
-        {
-            return RedirectToPage("/Error/NoSwitchBox");
-        }
+        // Allow access even without a cookie (for creating new switchbox)
+        // The update action will check for cookie in OnPostAsync
         return Page();
     }
     
-    public async Task<IActionResult> OnPostAsync(IFormFile? photo)
+    public async Task<IActionResult> OnPostAsync(IFormFile? photo, string? action)
     {
         if (photo is { Length: > 0 })
         {
@@ -47,11 +50,41 @@ public class PhotoUploadModel : PageModel
                 await photo.CopyToAsync(stream);
             }
 
-            // Read SwitchBoxId from cookie
-            if (!Request.Cookies.TryGetValue("SwitchBoxId", out var switchBoxIdStr) ||
-                !int.TryParse(switchBoxIdStr, out var switchBoxId))
+            int switchBoxId;
+
+            // Determine which action to take
+            if (action == "new")
             {
-                return RedirectToPage("/Error/NoSwitchBox");
+                // Create a new SwitchBox, for some reaoson we gotta give the full path for the SwitchBox model otherwise it throws error: 'SwitchBox' is a namespace but is used like a type 
+                // even though we have the using statement at the top, I gotta find where we use SwitchBox as a namespace
+                var newSwitchBox = new eSchalt.Backend.Models.SwitchBox
+                {
+                    Floor = "Insert value here",
+                    Room = "Insert value here",
+                    Group = "Insert value here",
+                    Type = "Insert value here"
+                };
+
+                _context.SwitchBoxes.Add(newSwitchBox);
+                await _context.SaveChangesAsync();
+                switchBoxId = newSwitchBox.Id;
+
+                Console.WriteLine($"[PhotoUpload] Created new SwitchBox with Id: {switchBoxId}");
+
+                Response.Cookies.Append("SwitchBoxId", switchBoxId.ToString(), new CookieOptions
+                {
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict
+                });
+            }
+            else
+            {
+                // Read SwitchBoxId from cookie
+                if (!Request.Cookies.TryGetValue("SwitchBoxId", out var switchBoxIdStr) ||
+                    !int.TryParse(switchBoxIdStr, out switchBoxId))
+                {
+                    return RedirectToPage("/Error/NoSwitchBox");
+                }
             }
 
             try
