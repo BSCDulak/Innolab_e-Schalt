@@ -87,6 +87,13 @@
                         <div>Es konnten leider keine Informationen gefunden werden.</div>
                     }
                 </div>
+                @if (!string.IsNullOrEmpty(Model.FileName) && Model.IsImageInTempFolder)
+                {
+                    <form method="post" asp-page-handler="SaveSwitchBox" class="mt-3">
+                        <input type="hidden" name="fileName" value="@Model.FileName" />
+                        <button type="submit" class="btn btn-light">Schaltkasten speichern</button>
+                    </form>
+                }
             </div>
             <div class="p-4">
                 @if (Model.SelectedComponent != null)
