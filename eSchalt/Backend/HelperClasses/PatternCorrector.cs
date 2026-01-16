@@ -6,33 +6,44 @@ namespace eSchalt.Backend.HelperClasses
     {
         public static string Correct(string aiJson, string patternJsonPath)
         {
+            //load the AI
             var det = JsonSerializer.Deserialize<AiDetectionResult>(aiJson) ?? new AiDetectionResult();
 
+            //load the pattern so that we know which names are allowed
             var allowed = LoadAllowedNamesFromPattern(patternJsonPath);
 
+            //we normalize the names since the names in the pattern vs. the names of the AI may differ
             foreach (var c in det.Components)
                 c.Name = NormalizeName(c.Name);
 
+            //we delete duplicate Boxes - we keep the one with the higher confidence
             det.Components = DeduplicateByIoU(det.Components, iouThreshold: 0.50);
 
+            //we sort the components into rows based on their y-coordinate (if components are the
+            //same height, they get sorted into the same row
             var rows = ClusterRows(det.Components, yThreshold: 60);
 
             foreach (var r in rows)
             {
+                //we order the components based on their x-coordinate 
                 r.Sort((a, b) => CenterX(a).CompareTo(CenterX(b)));
+                // we prevent the boxes from overlapping
                 SplitHorizontalOverlapsInRow(r, minOverlapPx: 2);
             }
 
+            //collect all rows
             var ordered = rows
                 .OrderBy(r => r.Average(CenterY))
                 .SelectMany(r => r)
                 .ToList();
 
+            //components get a new id after we ordered them
             for (int i = 0; i < ordered.Count; i++)
                 ordered[i].Id = i;
 
             det.Components = ordered;
 
+            //this is a warning if the KI missed a component or recognized a wrong one
             det.Warnings ??= new List<string>();
             foreach (var c in det.Components)
             {
