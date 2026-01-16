@@ -63,20 +63,32 @@ public class PhotoUploadModel : PageModel
                 // Pretty-print the JSON for easier reading
                 string jsonFileName = Path.ChangeExtension(fileName, ".json");
                 string jsonFilePath = Path.Combine(TempPath, jsonFileName);
-                
-                // Parse and reformat JSON with indentation for readability
-                var jsonDoc = JsonDocument.Parse(aiJson);
-                var options = new JsonSerializerOptions 
-                { 
-                    WriteIndented = true 
-                };
-                string prettyJson = JsonSerializer.Serialize(jsonDoc, options);
-                
-                await System.IO.File.WriteAllTextAsync(jsonFilePath, prettyJson);
-                Console.WriteLine($"[PhotoUpload] Saved pretty-printed AI JSON to: {jsonFilePath}");
 
-                // Import into DB (throws if JSON invalid)
-                await _aiImportService.ImportComponentsAsync(switchBoxId, aiJson);
+                // Parse json
+                var jsonDoc = JsonDocument.Parse(aiJson);
+                var options = new JsonSerializerOptions { WriteIndented = true };
+                string prettyJson = JsonSerializer.Serialize(jsonDoc, options);
+
+                //The raw json will be saved:
+                string rawJsonFileName = Path.GetFileNameWithoutExtension(jsonFileName) + "_raw.json";
+                string rawJsonPath = Path.Combine(TempPath, rawJsonFileName);
+                await System.IO.File.WriteAllTextAsync(rawJsonPath, prettyJson);
+                Console.WriteLine($"[PhotoUpload] Saved RAW AI JSON to: {rawJsonPath}");
+
+                //save a copy of the jsonfile that we change afterwars
+                string copyJsonFileName = Path.GetFileNameWithoutExtension(jsonFileName) + "_copy.json";
+                string copyJsonPath = Path.Combine(TempPath, copyJsonFileName);
+                await System.IO.File.WriteAllTextAsync(copyJsonPath, prettyJson);
+                Console.WriteLine($"[PhotoUpload] Saved COPY AI JSON to: {copyJsonPath}");
+
+                //load the pattern and correct the copy
+                string patternPath = GetPatternPathForSwitchBox(switchBoxId);
+                string correctedJson = PatternCorrector.Correct(aiJson, patternPath);
+                await System.IO.File.WriteAllTextAsync(copyJsonPath, correctedJson);
+                Console.WriteLine($"[PhotoUpload] Corrected COPY JSON via pattern: {copyJsonPath}");
+
+                //Import the corrected JSON in DB
+                await _aiImportService.ImportComponentsAsync(switchBoxId, correctedJson);
 
                 // Show the result on the detail page
                 return RedirectToPage("/SwitchBox/Detail", new { fileName = fileName });
@@ -111,4 +123,15 @@ public class PhotoUploadModel : PageModel
         var json = await response.Content.ReadAsStringAsync();
         return json;
     }
+
+
+    private string GetPatternPathForSwitchBox(int switchBoxId)
+    {
+        var patternFile = (switchBoxId == 1) ? "Cabinet1.json" : "Cabinet2.json";
+
+        var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+        return Path.Combine(baseDir, "AIdocker", patternFile);
+    }
+
+
 }

@@ -1,0 +1,209 @@
+{
+  "cabinet2": {
+    "rows": [
+      {
+        "row_id": "R1",
+        "type": "SPS",
+        "slots": [
+          { "id": "R1S1", "expected": "SPS" },
+          { "id": "R1S2", "expected": "SPS" },
+          { "id": "R1S3", "expected": "SPS" },
+          { "id": "R1S4", "expected": "SPS" },
+          { "id": "R1S5", "expected": "SPS" },
+          { "id": "R1S6", "expected": "SPS" },
+          { "id": "R1S7", "expected": "SPS" },
+          { "id": "R1S8", "expected": "SPS" }
+        ]
+      },
+      {
+        "row_id": "R2",
+        "type": "SPS",
+        "slots": [
+          { "id": "R2S1", "expected": "SPS" },
+          { "id": "R2S2", "expected": "SPS" },
+          { "id": "R2S3", "expected": "SPS" },
+          { "id": "R2S4", "expected": "SPS" },
+          { "id": "R2S5", "expected": "SPS" }
+        ]
+      },
+      {
+        "row_id": "R3",
+        "type": "Dimmer",
+        "slots": [
+          { "id": "R3S1",  "expected": "Dimmer" },
+          { "id": "R3S2",  "expected": "Dimmer" },
+          { "id": "R3S3",  "expected": "Dimmer" },
+          { "id": "R3S4",  "expected": "Dimmer" },
+          { "id": "R3S5",  "expected": "Dimmer" },
+          { "id": "R3S6",  "expected": "Dimmer" },
+          { "id": "R3S7",  "expected": "Dimmer" },
+          { "id": "R3S8",  "expected": "Dimmer" },
+          { "id": "R3S9",  "expected": "Dimmer" },
+          { "id": "R3S10", "expected": "Dimmer" },
+          { "id": "R3S11", "expected": "Dimmer" }
+        ]
+      },
+      {
+        "row_id": "R4",
+        "type": "Relais",
+        "slots": [
+          { "id": "R4S1", "expected": "empty"  }, 
+          { "id": "R4S2", "expected": "empty"  }, 
+          { "id": "R4S3", "expected": "Relais" },
+          { "id": "R4S4", "expected": "empty"  },
+          { "id": "R4S5", "expected": "Relais" },
+          { "id": "R4S6", "expected": "empty"  },
+          { "id": "R4S7", "expected": "empty"  },
+          { "id": "R4S8", "expected": "Relais" },
+          { "id": "R4S9", "expected": "Relais" },
+          { "id": "R4S10", "expected": "Relais" },
+          { "id": "R4S11", "expected": "empty"  },
+          { "id": "R4S12", "expected": "Relais" },
+          { "id": "R4S13", "expected": "Relais" },
+          { "id": "R4S14", "expected": "empty"  },
+          { "id": "R4S15", "expected": "empty"  },
+          { "id": "R4S16", "expected": "empty"  },
+          { "id": "R4S17","expected": "Relais" },
+          { "id": "R4S18", "expected": "Relais" },
+          { "id": "R4S19", "expected": "Relais" },
+          { "id": "R4S20", "expected": "Relais" },
+          { "id": "R4S21", "expected": "Relais" },
+          { "id": "R4S22", "expected": "Relais" },
+          { "id": "R4S23", "expected": "Relais" },
+          { "id": "R4S24", "expected": "empty"  },
+          { "id": "R4S25", "expected": "Relais" },
+          { "id": "R4S26", "expected": "Relais" },
+          { "id": "R4S27", "expected": "empty"  },
+          { "id": "R4S28", "expected": "empty"  },
+          { "id": "R4S29", "expected": "Relais" },
+          { "id": "R4S30", "expected": "Relais" },
+          { "id": "R4S31", "expected": "Relais" },
+          { "id": "R4S32", "expected": "Relais" },
+          { "id": "R4S33", "expected": "Relais" },
+          { "id": "R4S34", "expected": "Relais" },
+          { "id": "R4S35", "expected": "empty"  },
+          { "id": "R4S36", "expected": "Relais" },
+          { "id": "R4S37", "expected": "Relais" }
+        ]
+      },
+      {
+        "row_id": "R5",
+        "type": "Relais",
+        "slots": [
+          { "id": "R5S1",  "expected": "Relais" },
+          { "id": "R5S2",  "expected": "Relais" },
+          { "id": "R5S3",  "expected": "Relais" },
+          { "id": "R5S4",  "expected": "Relais" },
+          { "id": "R5S5",  "expected": "Relais" },
+          { "id": "R5S6",  "expected": "Relais" },
+          { "id": "R5S7", "expected": "empty"  },
+          { "id": "R5S8", "expected": "empty"  },
+          { "id": "R5S9",  "expected": "Relais" },
+          { "id": "R5S10",  "expected": "Relais" },
+          { "id": "R5S11",  "expected": "Relais" },
+          { "id": "R5S12", "expected": "Relais" },
+          { "id": "R5S13",  "expected": "Relais" },
+          { "id": "R5S14",  "expected": "Relais" },
+          { "id": "R5S15",  "expected": "Relais" },
+          { "id": "R5S16",  "expected": "Relais" },
+          { "id": "R5S17",  "expected": "Relais" },
+          { "id": "R5S18",  "expected": "Relais" },
+          { "id": "R5S19",  "expected": "Relais" },
+          { "id": "R5S20",  "expected": "Relais" },
+          { "id": "R5S21",  "expected": "Relais" },
+          { "id": "R5S22",  "expected": "Relais" },
+          { "id": "R5S23",  "expected": "Relais" },
+          { "id": "R5S24",  "expected": "Relais" },
+          { "id": "R5S25",  "expected": "Relais" },
+          { "id": "R5S26",  "expected": "Relais" },
+          { "id": "R5S27",  "expected": "Relais" },
+          { "id": "R5S28",  "expected": "Relais" },
+          { "id": "R5S29", "expected": "empty"  },
+          { "id": "R5S30", "expected": "empty"  },
+          { "id": "R5S31", "expected": "empty"  },
+          { "id": "R5S32",  "expected": "Relais" },
+          { "id": "R5S33",  "expected": "Relais" },
+          { "id": "R5S34",  "expected": "Relais" },
+          { "id": "R5S35",  "expected": "Relais" },
+          { "id": "R5S37",  "expected": "Relais" }
+        ]
+      },
+      {
+        "row_id": "R6",
+        "type": "Verbinder",
+        "slots": [
+          { "id": "R6S1",  "expected": "Verbinder" },
+          { "id": "R6S2", "expected": "empty"  },
+          { "id": "R6S3",  "expected": "Verbinder" },
+          { "id": "R6S4", "expected": "empty"  },
+          { "id": "R6S5",  "expected": "Verbinder" },
+          { "id": "R6S6", "expected": "empty"  },
+          { "id": "R6S7",  "expected": "Verbinder" },
+          { "id": "R6S8", "expected": "empty"  },
+          { "id": "R6S9",  "expected": "Verbinder" },
+          { "id": "R6S10", "expected": "empty"  },
+          { "id": "R6S11",  "expected": "Verbinder" }
+        ]
+      },
+      {
+        "row_id": "R7",
+        "type": "Verbinder",
+        "slots": [
+          { "id": "R7S1",  "expected": "Verbinder" },
+          { "id": "R7S2", "expected": "empty"  },
+          { "id": "R7S3",  "expected": "Verbinder" }
+        ]
+      },
+      {
+        "row_id": "R8",
+        "type": ["Sicherung230V","FI-Sicherungskombi"],
+        "slots": [
+          { "id": "R8S1",  "expected": "Sicherung230V" },
+          { "id": "R8S2",  "expected": "Sicherung230V" },
+          { "id": "R8S3", "expected": "empty"  },
+          { "id": "R8S4",  "expected": "Sicherung230V" },
+          { "id": "R8S5",  "expected": "Sicherung230V" },
+          { "id": "R8S6",  "expected": "Sicherung230V" },
+          { "id": "R8S7", "expected": "empty"  },
+          { "id": "R8S8",  "expected": "Sicherung230V" },
+          { "id": "R8S9",  "expected": "Sicherung230V" },
+          { "id": "R8S10",  "expected": "Sicherung230V" },
+          { "id": "R8S11",  "expected": "Sicherung230V" },
+          { "id": "R8S12", "expected": "Sicherung230V" },
+          { "id": "R8S13",  "expected": "Sicherung230V" },
+          { "id": "R8S14",  "expected": "FI-Sicherungskombi" },
+          { "id": "R8S15", "expected": "empty"  },
+          { "id": "R8S16",  "expected": "Sicherung230V" },
+          { "id": "R8S17",  "expected": "Sicherung230V" },
+          { "id": "R8S18",  "expected": "Sicherung230V" },
+          { "id": "R8S19",  "expected": "Sicherung230V" },
+          { "id": "R8S20", "expected": "Sicherung230V" },
+          { "id": "R8S21",  "expected": "Sicherung230V" }
+        ]
+      },
+      {
+        "row_id": "R9",
+        "type": ["Sicherung230V","Sicherung400V"],
+        "slots": [
+          { "id": "R9S1",  "expected": "Sicherung230V" },
+          { "id": "R9S2",  "expected": "Sicherung230V" },
+          { "id": "R9S3",  "expected": "Sicherung230V" },
+          { "id": "R9S4",  "expected": "Sicherung230V" },
+          { "id": "R9S5", "expected": "empty"  },
+          { "id": "R9S6",  "expected": "Sicherung400V" },
+          { "id": "R9S7",  "expected": "Sicherung400V" },
+          { "id": "R9S8",  "expected": "Sicherung400V" },
+          { "id": "R9S9",  "expected": "Sicherung400V" }
+        ]
+      },
+      {
+        "row_id": "R10",
+        "type": "FI",
+        "slots": [
+          { "id": "R10S1", "expected": "FI" },
+          { "id": "R10S2", "expected": "FI" } 
+        ]
+      }
+    ]
+  }
+}
