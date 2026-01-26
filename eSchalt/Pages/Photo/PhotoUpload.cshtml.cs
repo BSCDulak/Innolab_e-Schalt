@@ -59,10 +59,10 @@ public class PhotoUploadModel : PageModel
                 // even though we have the using statement at the top, I gotta find where we use SwitchBox as a namespace
                 var newSwitchBox = new eSchalt.Backend.Models.SwitchBox
                 {
-                    Floor = "Insert value here",
-                    Room = "Insert value here",
-                    Group = "Insert value here",
-                    Type = "Insert value here"
+                    Floor = "",
+                    Room = "",
+                    Group = "",
+                    Type = ""
                 };
 
                 _context.SwitchBoxes.Add(newSwitchBox);
