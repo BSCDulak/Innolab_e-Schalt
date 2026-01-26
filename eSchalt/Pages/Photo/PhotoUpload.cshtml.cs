@@ -42,15 +42,8 @@ public class PhotoUploadModel : PageModel
             if (!Directory.Exists(TempPath))
                 Directory.CreateDirectory(TempPath);
 
-            string fileName = Guid.NewGuid() + Path.GetExtension(photo.FileName);
-            string filePath = Path.Combine(TempPath, fileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await photo.CopyToAsync(stream);
-            }
-
             int switchBoxId;
+            string fileName;
 
             // Determine which action to take
             if (action == "new")
@@ -76,6 +69,9 @@ public class PhotoUploadModel : PageModel
                     HttpOnly = true,
                     SameSite = SameSiteMode.Strict
                 });
+
+                // Generate new filename for new switchbox
+                fileName = Guid.NewGuid() + Path.GetExtension(photo.FileName);
             }
             else
             {
@@ -85,6 +81,29 @@ public class PhotoUploadModel : PageModel
                 {
                     return RedirectToPage("/Error/NoSwitchBox");
                 }
+
+                // Find existing QRLink for this switchbox to reuse the filename
+                var existingQRLink = _context.SwitchBoxQRLinks.FirstOrDefault(l => l.SwitchBoxId == switchBoxId);
+                if (existingQRLink != null)
+                {
+                    // Reuse existing filename to keep the same QR code
+                    fileName = existingQRLink.QRLink;
+                    Console.WriteLine($"[PhotoUpload] Reusing existing filename for override: {fileName}");
+                }
+                else
+                {
+                    // No existing link, generate new filename
+                    fileName = Guid.NewGuid() + Path.GetExtension(photo.FileName);
+                    Console.WriteLine($"[PhotoUpload] No existing QRLink found, generating new filename: {fileName}");
+                }
+            }
+
+            string filePath = Path.Combine(TempPath, fileName);
+
+            // Overwrite existing file if it exists (for override scenario)
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await photo.CopyToAsync(stream);
             }
 
             try
@@ -119,6 +138,10 @@ public class PhotoUploadModel : PageModel
                 string correctedJson = PatternCorrector.Correct(aiJson, patternPath);
                 await System.IO.File.WriteAllTextAsync(copyJsonPath, correctedJson);
                 Console.WriteLine($"[PhotoUpload] Corrected COPY JSON via pattern: {copyJsonPath}");
+
+                // Save the corrected JSON file (this is the one that will be moved to presets)
+                await System.IO.File.WriteAllTextAsync(jsonFilePath, correctedJson);
+                Console.WriteLine($"[PhotoUpload] Saved corrected JSON to: {jsonFilePath}");
 
                 //Import the corrected JSON in DB
                 await _aiImportService.ImportComponentsAsync(switchBoxId, correctedJson);

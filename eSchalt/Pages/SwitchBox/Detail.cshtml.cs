@@ -101,19 +101,19 @@ public class DetailpageModel : PageModel
 
         if (!string.IsNullOrEmpty(FileName))
         {
-            // First check Preset folder
             var presetPath = Path.Combine("wwwroot", PresetFolder, FileName);
             var tempPath = Path.Combine("wwwroot", TempFolder, FileName);
 
-            if (System.IO.File.Exists(presetPath))
-            {
-                ImagePath = PresetFolder + FileName;
-                IsImageInTempFolder = false;
-            }
-            else if (System.IO.File.Exists(tempPath))
+            // Check temp folder first - if file exists in both, temp folder has the newly uploaded image
+            if (System.IO.File.Exists(tempPath))
             {
                 ImagePath = TempFolder + FileName;
                 IsImageInTempFolder = true;
+            }
+            else if (System.IO.File.Exists(presetPath))
+            {
+                ImagePath = PresetFolder + FileName;
+                IsImageInTempFolder = false;
             }
         }
 
@@ -211,17 +211,16 @@ public class DetailpageModel : PageModel
             var tempImagePath = Path.Combine("wwwroot", TempFolder, fileName);
             var presetImagePath = Path.Combine("wwwroot", PresetFolder, fileName);
 
-            // Only move image if it exists in temp folder (for new uploads)
+            // Ensure presets directory exists
+            var presetDir = Path.Combine("wwwroot", PresetFolder);
+            if (!Directory.Exists(presetDir))
+            {
+                Directory.CreateDirectory(presetDir);
+            }
+
             if (System.IO.File.Exists(tempImagePath))
             {
-                // Ensure presets directory exists
-                var presetDir = Path.Combine("wwwroot", PresetFolder);
-                if (!Directory.Exists(presetDir))
-                {
-                    Directory.CreateDirectory(presetDir);
-                }
-
-                // Move image from temp to presets folder
+                // Move image from temp to presets folder (overwrites existing file)
                 System.IO.File.Move(tempImagePath, presetImagePath, overwrite: true);
                 Console.WriteLine($"[Detail] Moved image from {tempImagePath} to {presetImagePath}");
 
@@ -233,35 +232,40 @@ public class DetailpageModel : PageModel
                     System.IO.File.Move(tempJsonPath, presetJsonPath, overwrite: true);
                     Console.WriteLine($"[Detail] Moved JSON from {tempJsonPath} to {presetJsonPath}");
                 }
+            }
+            else if (System.IO.File.Exists(presetImagePath))
+            {
+                // File already in presets folder (override scenario), ensure it's up to date
+                Console.WriteLine($"[Detail] Image already exists in presets folder: {presetImagePath}");
+            }
 
-                // Check if a SwitchBoxQRLink already exists for this filename
-                var existingQRLink = _context.SwitchBoxQRLinks.FirstOrDefault(l => l.QRLink == fileName);
+            // Check if a SwitchBoxQRLink already exists for this filename
+            var existingQRLink = _context.SwitchBoxQRLinks.FirstOrDefault(l => l.QRLink == fileName);
 
-                if (existingQRLink != null)
+            if (existingQRLink != null)
+            {
+                // Update existing QRLink to point to the current SwitchBoxId
+                if (existingQRLink.SwitchBoxId != switchBoxId)
                 {
-                    // Update existing QRLink to point to the current SwitchBoxId
-                    if (existingQRLink.SwitchBoxId != switchBoxId)
-                    {
-                        Console.WriteLine($"[Detail] Updating existing QRLink {existingQRLink.Id} from SwitchBoxId {existingQRLink.SwitchBoxId} to {switchBoxId}");
-                        existingQRLink.SwitchBoxId = switchBoxId;
-                        _context.SwitchBoxQRLinks.Update(existingQRLink);
-                    }
-                    else
-                    {
-                        Console.WriteLine($"[Detail] QRLink already exists and points to correct SwitchBoxId {switchBoxId}");
-                    }
+                    Console.WriteLine($"[Detail] Updating existing QRLink {existingQRLink.Id} from SwitchBoxId {existingQRLink.SwitchBoxId} to {switchBoxId}");
+                    existingQRLink.SwitchBoxId = switchBoxId;
+                    _context.SwitchBoxQRLinks.Update(existingQRLink);
                 }
                 else
                 {
-                    // Create new QRLink
-                    var newQRLink = new SwitchBoxQRLink
-                    {
-                        SwitchBoxId = switchBoxId,
-                        QRLink = fileName
-                    };
-                    _context.SwitchBoxQRLinks.Add(newQRLink);
-                    Console.WriteLine($"[Detail] Created new QRLink for SwitchBoxId {switchBoxId} with QRLink {fileName}");
+                    Console.WriteLine($"[Detail] QRLink already exists and points to correct SwitchBoxId {switchBoxId}");
                 }
+            }
+            else
+            {
+                // Create new QRLink
+                var newQRLink = new SwitchBoxQRLink
+                {
+                    SwitchBoxId = switchBoxId,
+                    QRLink = fileName
+                };
+                _context.SwitchBoxQRLinks.Add(newQRLink);
+                Console.WriteLine($"[Detail] Created new QRLink for SwitchBoxId {switchBoxId} with QRLink {fileName}");
             }
 
             await _context.SaveChangesAsync();
