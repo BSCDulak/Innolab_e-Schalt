@@ -29,10 +29,15 @@ public class SwitchBoxRepository
             .Where(cc => componentIds.Contains(cc.FromComponentId) && componentIds.Contains(cc.ToComponentId))
             .ToList();
 
-        // Map backend components to frontend components
+        // Map backend components (double coordinates) to frontend components (int coordinates)
         var frontendComponents = dbSwitchBox.Components
             .Select(c => new eSchalt.Frontend.Classes.Models.Component(
-                c.Id, c.Name, c.XPosTopLeft, c.YPosTopLeft, c.XPosBottomRight, c.YPosBottomRight))
+                c.Id,
+                c.Name,
+                (int)c.XPosTopLeft,
+                (int)c.YPosTopLeft,
+                (int)c.XPosBottomRight,
+                (int)c.YPosBottomRight))
             .ToDictionary(c => c.Id, c => c);
 
         // Reconstruct connections in frontend model

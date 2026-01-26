@@ -21,7 +21,10 @@
                     <p id="infoText" class="text-break">Ziehe Dateien hierher oder wähle sie von deinem Computer aus.</p>
                 </div>
             </div>
-            <button id="uploadButton" class="btn btn-primary mt-4 px-5 py-3" type="submit">Hochladen</button>
+            <div class="mt-4 d-flex gap-3 justify-content-center flex-wrap">
+                <button id="uploadButton" name="action" value="update" class="btn btn-primary px-5 py-3" type="submit">Hochladen (Überschreiben)</button>
+                <button id="uploadButtonNew" name="action" value="new" class="btn btn-secondary px-5 py-3" type="submit">Hochladen (neuer Schaltschrank)</button>
+            </div>
         </div>
     </form>
 </div>
@@ -32,9 +35,13 @@
         const photoInput = document.getElementById('photoUpload')
         const uploadButton = document.getElementById('uploadButton')
 
+        const uploadButtonNew = document.getElementById('uploadButtonNew')
         uploadButton.disabled = true;
+        uploadButtonNew.disabled = true;
         photoInput.addEventListener('change', () => {
-            uploadButton.disabled = !photoInput.files.length
+            const hasFile = photoInput.files.length > 0;
+            uploadButton.disabled = !hasFile;
+            uploadButtonNew.disabled = !hasFile;
         });
 
         // Change info text to uploaded image

@@ -2,9 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using eSchalt.Backend;
 using eSchalt.Backend.Repositories;
+using eSchalt.Backend.Models;
 using eSchalt.Frontend.Classes.Models;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using QRCoder;
+using FrontendComponent = eSchalt.Frontend.Classes.Models.Component;
 
 namespace eSchalt.Pages.SwitchBox;
 
@@ -20,9 +23,11 @@ public class DetailpageModel : PageModel
     public string? FileName { get; set; }
     public int ImageWidth { get; private set; }
     public int ImageHeight { get; private set; }
+    public bool IsImageInTempFolder { get; private set; }
 
     public Frontend.Classes.Models.SwitchBox? SwitchBox { get; private set; }
-    public Component? SelectedComponent { get; private set; }
+    public FrontendComponent? SelectedComponent { get; private set; }
+    public string? QrCodeImageBase64 { get; private set; }
 
     public DetailpageModel(ApplicationDbContext context)
     {
@@ -56,7 +61,7 @@ public class DetailpageModel : PageModel
             {
                 SwitchBox = switchBox;
 
-                // Store the SwitchBoxId in a cookie for consistency
+                // Store the SwitchBoxId in a cookie for consistency and to use when uploading a new image under the assumption it is the same switchbox
                 var qrLink = _context.SwitchBoxQRLinks.FirstOrDefault(l => l.QRLink == fileName);
                 if (qrLink != null)
                 {
@@ -68,22 +73,15 @@ public class DetailpageModel : PageModel
                 }
 
                 UpdateImage();
+                GenerateQrCode();
                 return Page();
-            }
-            else
-            {
-                // remove old cookie to prevent issues with old SwitchBox if the link couldn't be associated with a Switchbox in SwitchBoxQRLinks table
-                if (Request.Cookies.ContainsKey("SwitchBoxId"))
-                {
-                    Response.Cookies.Delete("SwitchBoxId");
-                }
-                return RedirectToPage("/Error/NoSwitchBox");
             }
         }
 
-        // Fall back to cookie-based logic if no fileName provided, e.g. if the QR-Code just directs to the details page with no filename provided.
-        // This means that someone can use their last cookie, this can prolly be useful for redirect shenanigans but might cause issues if an old cookie
-        // should have been removed instead.
+        // Fall back to cookie-based logic if no fileName provided, or if fileName wasn't found in QRLinks
+        // This handles cases where:
+        // - QR-Code just directs to the details page with no filename
+        // - A new photo was uploaded (has fileName but not in QRLinks table)
         Initialize();
 
         if (SwitchBox == null)
@@ -91,6 +89,7 @@ public class DetailpageModel : PageModel
             return RedirectToPage("/Error/NoSwitchBox");
         }
 
+        GenerateQrCode();
         return Page();
     }
 
@@ -98,20 +97,23 @@ public class DetailpageModel : PageModel
     {
         // Default values
         ImagePath = DefaultImage;
+        IsImageInTempFolder = false;
 
         if (!string.IsNullOrEmpty(FileName))
         {
-            // First check Preset folder
             var presetPath = Path.Combine("wwwroot", PresetFolder, FileName);
             var tempPath = Path.Combine("wwwroot", TempFolder, FileName);
 
-            if (System.IO.File.Exists(presetPath))
-            {
-                ImagePath = PresetFolder + FileName;
-            }
-            else if (System.IO.File.Exists(tempPath))
+            // Check temp folder first - if file exists in both, temp folder has the newly uploaded image
+            if (System.IO.File.Exists(tempPath))
             {
                 ImagePath = TempFolder + FileName;
+                IsImageInTempFolder = true;
+            }
+            else if (System.IO.File.Exists(presetPath))
+            {
+                ImagePath = PresetFolder + FileName;
+                IsImageInTempFolder = false;
             }
         }
 
@@ -122,7 +124,7 @@ public class DetailpageModel : PageModel
         }
 
         // Update percentages for the button for each component
-        foreach (Component component in SwitchBox?.Components ?? [])
+        foreach (FrontendComponent component in SwitchBox?.Components ?? [])
         {
             // Convert absolute pixel positions to percent to be responsive
             component.ButtonTop = (float)component.YPosTopLeft / ImageHeight * 100;
@@ -132,6 +134,28 @@ public class DetailpageModel : PageModel
         }
         // HttpContext.Session.SetInt32("ImageWidth", ImageWidth);
         // HttpContext.Session.SetInt32("ImageHeight", ImageHeight);
+    }
+
+    private void GenerateQrCode()
+    {
+        if (string.IsNullOrEmpty(FileName))
+        {
+            QrCodeImageBase64 = null;
+            return;
+        }
+
+        // Generate QR code with relative path only so we are host agnostic (also the database QR-Code linking to Switchboxes works with the filename like that)
+        var qrCodeUrl = $"/detail?fileName={Uri.EscapeDataString(FileName)}";
+
+        using (var qrGenerator = new QRCodeGenerator())
+        {
+            var qrCodeData = qrGenerator.CreateQrCode(qrCodeUrl, QRCodeGenerator.ECCLevel.Q);
+            using (var qrCode = new PngByteQRCode(qrCodeData))
+            {
+                var qrCodeBytes = qrCode.GetGraphic(20);
+                QrCodeImageBase64 = Convert.ToBase64String(qrCodeBytes);
+            }
+        }
     }
     
     public async Task<IActionResult> OnPostAsync(string? fileName)
@@ -144,11 +168,117 @@ public class DetailpageModel : PageModel
         
         var selectedId = Request.Form["selectedComponent"];
         if (string.IsNullOrEmpty(selectedId))
+        {
+            GenerateQrCode();
             return Page();
+        }
         
         if (int.TryParse(Request.Form["selectedComponent"], out int id))
             SelectedComponent = SwitchBox?.Components.FirstOrDefault(c => c.Id == id);
 
+        GenerateQrCode();
         return Page();
+    }
+
+    public async Task<IActionResult> OnPostSaveSwitchBoxAsync(string? fileName, string? room, string? floor, string? group, string? type)
+    {
+        if (string.IsNullOrEmpty(fileName))
+        {
+            return RedirectToPage("/Error/NoSwitchBox");
+        }
+
+        // Get SwitchBoxId from cookie
+        if (!Request.Cookies.TryGetValue("SwitchBoxId", out var switchBoxIdStr) ||
+            !int.TryParse(switchBoxIdStr, out var switchBoxId))
+        {
+            return RedirectToPage("/Error/NoSwitchBox");
+        }
+
+        try
+        {
+            // Update SwitchBox properties if they were provided
+            var dbSwitchBox = _context.SwitchBoxes.FirstOrDefault(sb => sb.Id == switchBoxId);
+            if (dbSwitchBox != null)
+            {
+                dbSwitchBox.Room = room ?? string.Empty;
+                dbSwitchBox.Floor = floor ?? string.Empty;
+                dbSwitchBox.Group = group ?? string.Empty;
+                dbSwitchBox.Type = type ?? string.Empty;
+                _context.SwitchBoxes.Update(dbSwitchBox);
+                Console.WriteLine($"[Detail] Updated SwitchBox {switchBoxId} properties: Room={room}, Floor={floor}, Group={group}, Type={type}");
+            }
+
+            var tempImagePath = Path.Combine("wwwroot", TempFolder, fileName);
+            var presetImagePath = Path.Combine("wwwroot", PresetFolder, fileName);
+
+            // Ensure presets directory exists
+            var presetDir = Path.Combine("wwwroot", PresetFolder);
+            if (!Directory.Exists(presetDir))
+            {
+                Directory.CreateDirectory(presetDir);
+            }
+
+            if (System.IO.File.Exists(tempImagePath))
+            {
+                // Move image from temp to presets folder (overwrites existing file)
+                System.IO.File.Move(tempImagePath, presetImagePath, overwrite: true);
+                Console.WriteLine($"[Detail] Moved image from {tempImagePath} to {presetImagePath}");
+
+                // Also move JSON file if it exists
+                var tempJsonPath = Path.ChangeExtension(tempImagePath, ".json");
+                var presetJsonPath = Path.ChangeExtension(presetImagePath, ".json");
+                if (System.IO.File.Exists(tempJsonPath))
+                {
+                    System.IO.File.Move(tempJsonPath, presetJsonPath, overwrite: true);
+                    Console.WriteLine($"[Detail] Moved JSON from {tempJsonPath} to {presetJsonPath}");
+                }
+            }
+            else if (System.IO.File.Exists(presetImagePath))
+            {
+                // File already in presets folder (override scenario), ensure it's up to date
+                Console.WriteLine($"[Detail] Image already exists in presets folder: {presetImagePath}");
+            }
+
+            // Check if a SwitchBoxQRLink already exists for this filename
+            var existingQRLink = _context.SwitchBoxQRLinks.FirstOrDefault(l => l.QRLink == fileName);
+
+            if (existingQRLink != null)
+            {
+                // Update existing QRLink to point to the current SwitchBoxId
+                if (existingQRLink.SwitchBoxId != switchBoxId)
+                {
+                    Console.WriteLine($"[Detail] Updating existing QRLink {existingQRLink.Id} from SwitchBoxId {existingQRLink.SwitchBoxId} to {switchBoxId}");
+                    existingQRLink.SwitchBoxId = switchBoxId;
+                    _context.SwitchBoxQRLinks.Update(existingQRLink);
+                }
+                else
+                {
+                    Console.WriteLine($"[Detail] QRLink already exists and points to correct SwitchBoxId {switchBoxId}");
+                }
+            }
+            else
+            {
+                // Create new QRLink
+                var newQRLink = new SwitchBoxQRLink
+                {
+                    SwitchBoxId = switchBoxId,
+                    QRLink = fileName
+                };
+                _context.SwitchBoxQRLinks.Add(newQRLink);
+                Console.WriteLine($"[Detail] Created new QRLink for SwitchBoxId {switchBoxId} with QRLink {fileName}");
+            }
+
+            await _context.SaveChangesAsync();
+            Console.WriteLine($"[Detail] Successfully saved SwitchBox and QRLink for fileName {fileName}");
+
+            // Redirect back to detail page with the fileName
+            return RedirectToPage("/SwitchBox/Detail", new { fileName = fileName });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Detail] Error saving switchbox: {ex.Message}");
+            Console.WriteLine($"[Detail] Stack trace: {ex.StackTrace}");
+            return RedirectToPage("/Error/NoSwitchBox");
+        }
     }
 }

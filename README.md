@@ -132,4 +132,10 @@ Und wenn man das Image auf einen anderen Rechner importieren will, gibt man folg
 docker load -i yolo-infer.tar
 ```
 
+## New FAST API set up
+run in terminal in ordner AIDocker (not deeper)
+docker build -t eschalt-ai .
+docker run -p 8000:8000 eschalt-ai
 
+to check connection: http://localhost:8000/health
+to check post/get: http://localhost:8000/docs
