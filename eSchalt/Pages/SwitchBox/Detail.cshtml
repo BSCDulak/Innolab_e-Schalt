@@ -75,66 +75,70 @@
                     <form method="post" asp-page-handler="SaveSwitchBox">
                         <input type="hidden" name="fileName" value="@Model.FileName" />
                         <div class="row g-3 mt-2">
-                            <div class="col-md-6">
-                                <label for="room" class="form-label fw-bold">Raum:</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       id="room" 
-                                       name="room" 
-                                       value="@Model.SwitchBox.Room" 
-                                       placeholder="Raum eingeben" />
-                            </div>
-                            <div class="col-md-6">
-                                <label for="floor" class="form-label fw-bold">Stockwerk:</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       id="floor" 
-                                       name="floor" 
-                                       value="@Model.SwitchBox.Floor" 
-                                       placeholder="Stockwerk eingeben" />
-                            </div>
-                            <div class="col-md-6">
-                                <label for="type" class="form-label fw-bold">Typ PD:</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       id="type" 
-                                       name="type" 
-                                       value="@Model.SwitchBox.Type" 
-                                       placeholder="Typ PD eingeben" />
-                            </div>
-                            <div class="col-md-6">
-                                <label for="group" class="form-label fw-bold">Gruppe:</label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       id="group" 
-                                       name="group" 
-                                       value="@Model.SwitchBox.Group" 
-                                       placeholder="Gruppe eingeben" />
-                            </div>
-                        </div>
-                        
-                        @* QR Code Display *@
-                        @if (!string.IsNullOrEmpty(Model.QrCodeImageBase64))
-                        {
-                            <div class="mt-3">
-                                <span class="fw-bold">QR-Code zum Teilen:</span>
-                                <div class="mt-2">
-                                    <img src="data:image/png;base64,@Model.QrCodeImageBase64" 
-                                         alt="QR Code" 
-                                         class="bg-white p-2 rounded"
-                                         style="max-width: 200px; height: auto;" />
+                            <div class="col-md-7">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="room" class="form-label fw-bold">Raum:</label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="room" 
+                                               name="room" 
+                                               value="@Model.SwitchBox.Room" 
+                                               placeholder="Raum eingeben" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="floor" class="form-label fw-bold">Stockwerk:</label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="floor" 
+                                               name="floor" 
+                                               value="@Model.SwitchBox.Floor" 
+                                               placeholder="Stockwerk eingeben" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="type" class="form-label fw-bold">Typ PD:</label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="type" 
+                                               name="type" 
+                                               value="@Model.SwitchBox.Type" 
+                                               placeholder="Typ PD eingeben" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="group" class="form-label fw-bold">Gruppe:</label>
+                                        <input type="text" 
+                                               class="form-control" 
+                                               id="group" 
+                                               name="group" 
+                                               value="@Model.SwitchBox.Group" 
+                                               placeholder="Gruppe eingeben" />
+                                    </div>
                                 </div>
+                                
+                                @if (!string.IsNullOrEmpty(Model.FileName) && Model.IsImageInTempFolder)
+                                {
+                                    <button type="submit" class="btn btn-light mt-3">Schaltkasten speichern</button>
+                                }
+                                else if (!string.IsNullOrEmpty(Model.FileName))
+                                {
+                                    <button type="submit" class="btn btn-light mt-3">Informationen aktualisieren</button>
+                                }
                             </div>
-                        }
-                        
-                        @if (!string.IsNullOrEmpty(Model.FileName) && Model.IsImageInTempFolder)
-                        {
-                            <button type="submit" class="btn btn-light mt-3">Schaltkasten speichern</button>
-                        }
-                        else if (!string.IsNullOrEmpty(Model.FileName))
-                        {
-                            <button type="submit" class="btn btn-light mt-3">Informationen aktualisieren</button>
-                        }
+                            
+                            @* QR Code Display - Right side *@
+                            @if (!string.IsNullOrEmpty(Model.QrCodeImageBase64))
+                            {
+                                <div class="col-md-5">
+                                    <div class="d-flex flex-column align-items-center align-items-md-start">
+                                        <span class="fw-bold mb-2">QR-Code zum Teilen:</span>
+                                        <img src="data:image/png;base64,@Model.QrCodeImageBase64" 
+                                             alt="QR Code" 
+                                             class="bg-white p-2 rounded"
+                                             style="max-width: 100%; height: auto;" />
+                                    </div>
+                                </div>
+                            }
+                        </div>
                     </form>
                 }
                 else
