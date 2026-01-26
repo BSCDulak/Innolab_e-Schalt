@@ -6,6 +6,7 @@ using eSchalt.Backend.Models;
 using eSchalt.Frontend.Classes.Models;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using QRCoder;
 using FrontendComponent = eSchalt.Frontend.Classes.Models.Component;
 
 namespace eSchalt.Pages.SwitchBox;
@@ -26,6 +27,7 @@ public class DetailpageModel : PageModel
 
     public Frontend.Classes.Models.SwitchBox? SwitchBox { get; private set; }
     public FrontendComponent? SelectedComponent { get; private set; }
+    public string? QrCodeImageBase64 { get; private set; }
 
     public DetailpageModel(ApplicationDbContext context)
     {
@@ -71,6 +73,7 @@ public class DetailpageModel : PageModel
                 }
 
                 UpdateImage();
+                GenerateQrCode();
                 return Page();
             }
         }
@@ -86,6 +89,7 @@ public class DetailpageModel : PageModel
             return RedirectToPage("/Error/NoSwitchBox");
         }
 
+        GenerateQrCode();
         return Page();
     }
 
@@ -131,6 +135,28 @@ public class DetailpageModel : PageModel
         // HttpContext.Session.SetInt32("ImageWidth", ImageWidth);
         // HttpContext.Session.SetInt32("ImageHeight", ImageHeight);
     }
+
+    private void GenerateQrCode()
+    {
+        if (string.IsNullOrEmpty(FileName))
+        {
+            QrCodeImageBase64 = null;
+            return;
+        }
+
+        // Generate QR code with relative path only so we are host agnostic (also the database QR-Code linking to Switchboxes works with the filename like that)
+        var qrCodeUrl = $"/detail?fileName={Uri.EscapeDataString(FileName)}";
+
+        using (var qrGenerator = new QRCodeGenerator())
+        {
+            var qrCodeData = qrGenerator.CreateQrCode(qrCodeUrl, QRCodeGenerator.ECCLevel.Q);
+            using (var qrCode = new PngByteQRCode(qrCodeData))
+            {
+                var qrCodeBytes = qrCode.GetGraphic(20);
+                QrCodeImageBase64 = Convert.ToBase64String(qrCodeBytes);
+            }
+        }
+    }
     
     public async Task<IActionResult> OnPostAsync(string? fileName)
     {
@@ -142,11 +168,15 @@ public class DetailpageModel : PageModel
         
         var selectedId = Request.Form["selectedComponent"];
         if (string.IsNullOrEmpty(selectedId))
+        {
+            GenerateQrCode();
             return Page();
+        }
         
         if (int.TryParse(Request.Form["selectedComponent"], out int id))
             SelectedComponent = SwitchBox?.Components.FirstOrDefault(c => c.Id == id);
 
+        GenerateQrCode();
         return Page();
     }
 
