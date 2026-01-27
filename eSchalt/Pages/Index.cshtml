@@ -11,50 +11,19 @@
     @{
         bool isSwitchBoxSet = !string.IsNullOrEmpty(Request.Cookies["SwitchBoxId"]);
     }
-    @* Step 1 *@
+    @* Setup *@
     <div class="rounded-4 p-4 mb-4 border-dotted d-flex d-sm-block flex-column @(isSwitchBoxSet ? "bg-success" : "border-dotted-primary")">
-        <h2>Schritt 1</h2>
-        <div class="text-body-secondary mb-3 fst-italic">Scanne zuerst den QR-Code von deinem Schaltkasten.</div>
+        <div class="text-body-secondary mb-3 fst-italic">Scanne den QR-Code von deinem existierenden Schaltkasten oder erstelle einen neuen.</div>
         
         <a asp-page="/Photo/QRCode" class="btn @(isSwitchBoxSet ? "btn-primary" : "btn-secondary")">
             <i class="fa-solid fa-qrcode" aria-hidden="true"></i>
             @(isSwitchBoxSet ? "Neuen " : "")
             QR-Code scannen
         </a>
+        <span>oder</span>
+        <a asp-page="/Photo/PhotoUpload" class="btn btn-secondary">
+            <i class="fa-solid fa-upload" aria-hidden="true"></i>
+            Foto für neuen Schaltkasten hochladen.
+        </a>
     </div>  
-
-    @* Step 2 *@
-    <div class="rounded-4 p-4 mb-4 border-dotted @(isSwitchBoxSet ? "border-dotted-primary" : "")">
-        <h2>Schritt 2</h2>
-        <div class="text-body-secondary mb-3 fst-italic">Mache danach ein Foto oder lade ein Foto hoch.
-            Für dieses Foto werden dir alle wichtigen Informationen, Komponenten und Verbindungen angezeigt.</div>
-        
-        <div class="d-flex d-sm-block flex-column">
-            @if (isSwitchBoxSet)
-            {
-                <a asp-page="/Photo/Camera" class="btn btn-secondary">
-                    <i class="fa-solid fa-camera" aria-hidden="true"></i>
-                    Kamera
-                </a>
-                <span>oder</span>
-                <a asp-page="/Photo/PhotoUpload" class="btn btn-secondary">
-                    <i class="fa-solid fa-upload" aria-hidden="true"></i>
-                    Foto hochladen
-                </a>
-            }
-            else
-            {
-                <span class="btn btn-disabled">
-                    <i class="fa-solid fa-camera" aria-hidden="true"></i>
-                    Kamera
-                </span>
-                <span>oder</span>
-                <span class="btn btn-disabled">
-                    <i class="fa-solid fa-upload" aria-hidden="true"></i>
-                    Foto hochladen
-                </span>
-            }
-            
-        </div>
-    </div>
 </div>
